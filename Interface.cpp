@@ -57,17 +57,30 @@ void Interface::processInput() const {
   }
 }
 
+void Interface::render() const {
+  // render commands
+  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  for (const GameObject* go : this->gameObjects) {
+    go->render();
+  }
+}
+
 void Interface::run() {
   while (!glfwWindowShouldClose(this->window)) {
     // input checks
     this->processInput();
 
     // rendering commands
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    this->render();
 
     // checks events and swap buffers
     glfwSwapBuffers(this->window);
     glfwPollEvents();
   }
+}
+
+void Interface::addGameObject(const GameObject* go) {
+  this->gameObjects.push_back(go);
 }
