@@ -9,11 +9,9 @@
 
 Engine* Engine::instance = nullptr;
 
-Engine::Engine() {
+Engine::Engine() : renderer(new Renderer()) {
   this->initOpenGL();
   this->initWindow();
-
-  renderer = new Renderer();
 }
 
 Engine::~Engine() {
