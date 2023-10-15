@@ -1,16 +1,16 @@
-#ifndef INTERFACE_HPP
-#define INTERFACE_HPP
+#ifndef ENGINE_HPP
+#define ENGINE_HPP
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <vector>
-#include "GameObject.hpp"
+#include "Renderable.hpp"
 
-class Interface {
+class Engine {
  public:
-  Interface();
-  virtual ~Interface();
+  Engine();
+  virtual ~Engine();
 
   void run();
   void initOpenGL() const;
@@ -19,14 +19,14 @@ class Interface {
   void loadTextures() const;
   void render() const;
   void processInput() const;
-  void addGameObject(const GameObject* go);
+  void addRenderable(const Renderable* go);
 
  private:
   static constexpr int WINDOW_WIDTH = 1280;
   static constexpr int WINDOW_HEIGHT = 720;
 
   unsigned int chessboardTexture;
-  std::vector<const GameObject*> gameObjects;
+  std::vector<const Renderable*> renderables;
 
   GLFWwindow* window;
 };

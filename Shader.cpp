@@ -78,8 +78,6 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
   const char* fShaderCode = fragmentCode.c_str();
 
   unsigned int vertex, fragment;
-  int success;
-  char infoLog[512];
 
   vertex = compileShader(vShaderCode, GL_VERTEX_SHADER);
   fragment = compileShader(fShaderCode, GL_FRAGMENT_SHADER);

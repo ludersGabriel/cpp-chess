@@ -1,18 +1,18 @@
-#include "Interface.hpp"
+#include "Engine.hpp"
 
 #include <iostream>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-Interface::Interface() {
+Engine::Engine() {
   this->initOpenGL();
   this->initWindow();
 }
 
-Interface::~Interface() { glfwTerminate(); }
+Engine::~Engine() { glfwTerminate(); }
 
-void Interface::initOpenGL() const {
+void Engine::initOpenGL() const {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -24,7 +24,7 @@ void frameBufferSizeCallback(GLFWwindow* window, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
-void Interface::initWindow() {
+void Engine::initWindow() {
   this->window =
       glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "OpenGL", nullptr, nullptr);
 
@@ -43,7 +43,7 @@ void Interface::initWindow() {
   glfwSetFramebufferSizeCallback(this->window, frameBufferSizeCallback);
 }
 
-void Interface::initGlad() const {
+void Engine::initGlad() const {
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     std::cerr << "Failed to initialize GLAD" << std::endl;
 
@@ -51,23 +51,23 @@ void Interface::initGlad() const {
   }
 }
 
-void Interface::processInput() const {
+void Engine::processInput() const {
   if (glfwGetKey(this->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(this->window, true);
   }
 }
 
-void Interface::render() const {
+void Engine::render() const {
   // render commands
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  for (const GameObject* go : this->gameObjects) {
-    go->render();
+  for (const Renderable* re : this->renderables) {
+    re->render();
   }
 }
 
-void Interface::run() {
+void Engine::run() {
   while (!glfwWindowShouldClose(this->window)) {
     // input checks
     this->processInput();
@@ -81,6 +81,6 @@ void Interface::run() {
   }
 }
 
-void Interface::addGameObject(const GameObject* go) {
-  this->gameObjects.push_back(go);
+void Engine::addRenderable(const Renderable* go) {
+  this->renderables.push_back(go);
 }

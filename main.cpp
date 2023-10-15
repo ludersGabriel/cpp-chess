@@ -1,11 +1,11 @@
-#include "Interface.hpp"
+#include "Engine.hpp"
 #include "ChessBoard.hpp"
 
 int main() {
+  Engine inter = Engine();
   ChessBoard boardl = ChessBoard("textures/chessboard.png");
-  Interface inter = Interface();
 
-  inter.addGameObject(&boardl);
+  inter.addRenderable(&boardl);
 
   inter.run();
 

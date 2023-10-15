@@ -1,10 +1,10 @@
-#include "GameObject.hpp"
+#include "Renderable.hpp"
 
 #include <glad/glad.h>
 #include <iostream>
 #include "stb_image.h"
 
-GameObject::GameObject(const std::vector<Vertex>& vertices,
+Renderable::Renderable(const std::vector<Vertex>& vertices,
                        const std::vector<index>& indices,
                        const std::string& texturePath,
                        const glm::vec3& position, const glm::vec3& scale,
@@ -50,20 +50,20 @@ GameObject::GameObject(const std::vector<Vertex>& vertices,
   this->shader = Shader();
 }
 
-GameObject::~GameObject() {
+Renderable::~Renderable() {
   glDeleteVertexArrays(1, &this->VAO);
   glDeleteBuffers(1, &this->VBO);
   glDeleteBuffers(1, &this->EBO);
   glDeleteTextures(1, &this->textureID);
 }
 
-unsigned int GameObject::getVAO() const { return this->VAO; }
+unsigned int Renderable::getVAO() const { return this->VAO; }
 
-unsigned int GameObject::getVBO() const { return this->VBO; }
+unsigned int Renderable::getVBO() const { return this->VBO; }
 
-unsigned int GameObject::getEBO() const { return this->EBO; }
+unsigned int Renderable::getEBO() const { return this->EBO; }
 
-unsigned int GameObject::setUpTexture(std::string path) {
+unsigned int Renderable::setUpTexture(std::string path) {
   unsigned int texture;
   int height, width, nrChannels;
 
@@ -101,7 +101,7 @@ unsigned int GameObject::setUpTexture(std::string path) {
   return texture;
 }
 
-void GameObject::render() const {
+void Renderable::render() const {
   this->shader.use();
 
   // bind the vertex array object

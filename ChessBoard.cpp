@@ -1,7 +1,7 @@
 #include "ChessBoard.hpp"
 
 ChessBoard::ChessBoard(std::string texturePath)
-    : GameObject(this->generateVertices(), this->generateIndices(),
+    : Renderable(this->generateVertices(), this->generateIndices(),
                  texturePath) {}
 
 std::vector<Vertex> ChessBoard::generateVertices() const {

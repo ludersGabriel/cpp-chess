@@ -1,10 +1,9 @@
-#ifndef GAME_OBJECT_HPP
-#define GAME_OBJECT_HPP
+#ifndef RENDERABLE_HPP
+#define RENDERABLE_HPP
 
 #include <glm/glm.hpp>
 
 #include <vector>
-
 #include "Shader.hpp"
 
 struct Vertex {
@@ -14,14 +13,14 @@ struct Vertex {
 
 typedef unsigned int index;
 
-class GameObject {
+class Renderable {
  public:
-  GameObject(const std::vector<Vertex>& vertices,
+  Renderable(const std::vector<Vertex>& vertices,
              const std::vector<index>& indices, const std::string& texturePath,
              const glm::vec3& position = glm::vec3(0.0f),
              const glm::vec3& scale = glm::vec3(1.0f),
              const glm::vec3& rotation = glm::vec3(0.0f));
-  virtual ~GameObject();
+  virtual ~Renderable();
 
   void render() const;
 

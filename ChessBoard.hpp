@@ -1,12 +1,12 @@
 #ifndef CHESS_BOARD_HPP
 #define CHESS_BOARD_HPP
 
-#include "GameObject.hpp"
-#include "Interface.hpp"
+#include "Renderable.hpp"
+#include "Engine.hpp"
 #include <string>
 #include <vector>
 
-class ChessBoard : public GameObject {
+class ChessBoard : public Renderable {
  public:
   ChessBoard(const std::string texturePath);
   virtual ~ChessBoard() = default;
