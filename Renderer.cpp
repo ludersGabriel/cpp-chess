@@ -1,10 +1,12 @@
 #include "Renderer.hpp"
 #include <glad/glad.h>
 
-Renderer::Renderer() { shader = Shader(); }
+Renderer::Renderer() : shader{new Shader()} {}
+
+Renderer::~Renderer() { delete shader; }
 
 void Renderer::draw(const Renderable& object) {
-  shader.use();
+  shader->use();
 
   glBindVertexArray(object.getVAO());
   glDrawElements(GL_TRIANGLES, object.getIndices().size(), GL_UNSIGNED_INT, 0);

@@ -7,13 +7,13 @@
 class Renderer {
  public:
   Renderer();
-  virtual ~Renderer() = default;
+  virtual ~Renderer();
 
   void draw(const Renderable& object);
   void clear();
 
  private:
-  Shader shader;
+  Shader* shader;
 };
 
 #endif

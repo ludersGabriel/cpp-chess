@@ -2,12 +2,12 @@
 #include "ChessBoard.hpp"
 
 int main() {
-  Engine inter = Engine();
-  ChessBoard boardl = ChessBoard("textures/chessboard.png");
+  Engine* engine = Engine::getInstance();
+  new ChessBoard("textures/chessboard.png");
 
-  inter.addRenderable(&boardl);
+  engine->run();
 
-  inter.run();
+  engine->shutdown();
 
   return 0;
 }

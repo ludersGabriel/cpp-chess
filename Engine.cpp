@@ -1,9 +1,13 @@
 #include "Engine.hpp"
+#include "Renderable.hpp"
+#include "Renderer.hpp"
 
 #include <iostream>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+Engine* Engine::instance = nullptr;
 
 Engine::Engine() {
   this->initOpenGL();
@@ -13,8 +17,23 @@ Engine::Engine() {
 }
 
 Engine::~Engine() {
+  this->clearRenderables();
+  delete this->renderer;
+
   glfwTerminate();
-  delete renderer;
+}
+
+void Engine::shutdown() {
+  delete instance;
+  instance = nullptr;
+}
+
+void Engine::clearRenderables() {
+  for (const Renderable* re : this->renderables) {
+    delete re;
+  }
+
+  this->renderables.clear();
 }
 
 void Engine::initOpenGL() const {
@@ -82,4 +101,12 @@ void Engine::run() {
 
 void Engine::addRenderable(const Renderable* go) {
   this->renderables.push_back(go);
+}
+
+Engine* Engine::getInstance() {
+  if (instance == nullptr) {
+    instance = new Engine();
+  }
+
+  return instance;
 }

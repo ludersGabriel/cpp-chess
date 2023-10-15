@@ -46,6 +46,9 @@ Renderable::Renderable(const std::vector<Vertex>& vertices,
   this->textureID = this->setUpTexture(texturePath);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, this->textureID);
+
+  // add myself to the renderer array
+  Engine::getInstance()->addRenderable(this);
 }
 
 Renderable::~Renderable() {

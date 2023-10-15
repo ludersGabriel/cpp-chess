@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "Engine.hpp"
+
 struct Vertex {
   float x, y, z;  // positions
   float u, v;     // texture coords

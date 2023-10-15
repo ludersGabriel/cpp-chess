@@ -12,7 +12,7 @@ class Shader {
   Shader(const std::string& vertexPath = defaultVertexShader,
          const std::string& fragmentPath = defaultFragmentShader);
 
-  virtual ~Shader() = default;
+  virtual ~Shader();
 
   void use() const;
 

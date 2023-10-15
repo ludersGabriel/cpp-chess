@@ -5,22 +5,29 @@
 #include <GLFW/glfw3.h>
 
 #include <vector>
-#include "Renderable.hpp"
-#include "Renderer.hpp"
+
+class Renderable;
+class Renderer;
 
 class Engine {
  public:
-  Engine();
-  virtual ~Engine();
-
   void run();
   void initOpenGL() const;
   void initWindow();
   void initGlad() const;
   void processInput() const;
   void addRenderable(const Renderable* go);
+  void clearRenderables();
+
+  static Engine* getInstance();
+  static void shutdown();
 
  private:
+  Engine();
+  virtual ~Engine();
+
+  static Engine* instance;
+
   static constexpr int WINDOW_WIDTH = 1280;
   static constexpr int WINDOW_HEIGHT = 720;
 
