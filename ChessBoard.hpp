@@ -11,8 +11,8 @@ class ChessBoard : public Renderable {
   ChessBoard(const std::string texturePath);
   virtual ~ChessBoard() = default;
 
-  std::vector<Vertex> generateVertices() const;
-  std::vector<index> generateIndices() const;
+  const std::vector<Vertex> generateVertices() const;
+  const std::vector<index> generateIndices() const;
 
  private:
   std::string texturePath;

@@ -8,9 +8,14 @@
 Engine::Engine() {
   this->initOpenGL();
   this->initWindow();
+
+  renderer = new Renderer();
 }
 
-Engine::~Engine() { glfwTerminate(); }
+Engine::~Engine() {
+  glfwTerminate();
+  delete renderer;
+}
 
 void Engine::initOpenGL() const {
   glfwInit();
@@ -57,23 +62,17 @@ void Engine::processInput() const {
   }
 }
 
-void Engine::render() const {
-  // render commands
-  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  for (const Renderable* re : this->renderables) {
-    re->render();
-  }
-}
-
 void Engine::run() {
   while (!glfwWindowShouldClose(this->window)) {
     // input checks
     this->processInput();
 
     // rendering commands
-    this->render();
+    this->renderer->clear();
+
+    for (const Renderable* re : this->renderables) {
+      this->renderer->draw(*re);
+    }
 
     // checks events and swap buffers
     glfwSwapBuffers(this->window);

@@ -3,8 +3,8 @@
 
 #include <glm/glm.hpp>
 
+#include <string>
 #include <vector>
-#include "Shader.hpp"
 
 struct Vertex {
   float x, y, z;  // positions
@@ -22,8 +22,6 @@ class Renderable {
              const glm::vec3& rotation = glm::vec3(0.0f));
   virtual ~Renderable();
 
-  void render() const;
-
   unsigned int getVAO() const;
   unsigned int getVBO() const;
   unsigned int getEBO() const;
@@ -31,15 +29,17 @@ class Renderable {
   // TODO: ask about this in class
   unsigned int setUpTexture(std::string path);
 
+  const std::vector<Vertex>& getVertices() const;
+  const std::vector<index>& getIndices() const;
+
  protected:
   unsigned int VAO;
   unsigned int VBO;
   unsigned int EBO;
   unsigned int textureID;
-  Shader shader;
 
-  std::vector<Vertex> vertices;
-  std::vector<index> indices;
+  const std::vector<Vertex> vertices;
+  const std::vector<index> indices;
 
   glm::vec3 position;
   glm::vec3 scale;

@@ -4,7 +4,7 @@ ChessBoard::ChessBoard(std::string texturePath)
     : Renderable(this->generateVertices(), this->generateIndices(),
                  texturePath) {}
 
-std::vector<Vertex> ChessBoard::generateVertices() const {
+const std::vector<Vertex> ChessBoard::generateVertices() const {
   return {
       // Positions         // Texture Coords
       {-1.0f, 1.0f, 0.0f, 0.0f, 1.0f},  // Top-left
@@ -14,7 +14,7 @@ std::vector<Vertex> ChessBoard::generateVertices() const {
   };
 }
 
-std::vector<index> ChessBoard::generateIndices() const {
+const std::vector<index> ChessBoard::generateIndices() const {
   // Define indices for the two triangles of the quad.
   return {
       0, 1, 2,  // First Triangle

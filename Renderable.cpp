@@ -46,8 +46,6 @@ Renderable::Renderable(const std::vector<Vertex>& vertices,
   this->textureID = this->setUpTexture(texturePath);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, this->textureID);
-
-  this->shader = Shader();
 }
 
 Renderable::~Renderable() {
@@ -101,13 +99,10 @@ unsigned int Renderable::setUpTexture(std::string path) {
   return texture;
 }
 
-void Renderable::render() const {
-  this->shader.use();
+const std::vector<Vertex>& Renderable::getVertices() const {
+  return this->vertices;
+}
 
-  // bind the vertex array object
-  glBindVertexArray(this->VAO);
-  glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
-
-  // unbind
-  glBindVertexArray(0);
+const std::vector<index>& Renderable::getIndices() const {
+  return this->indices;
 }
