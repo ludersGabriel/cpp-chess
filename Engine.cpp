@@ -9,9 +9,13 @@
 
 Engine* Engine::instance = nullptr;
 
-Engine::Engine() : renderer(new Renderer()) {
+Engine::Engine() {
   this->initOpenGL();
   this->initWindow();
+
+  // this is not in the initialization list because I Need to set
+  // window and glfw context first
+  this->renderer = new Renderer();
 }
 
 Engine::~Engine() {
@@ -34,19 +38,18 @@ void Engine::clearRenderables() {
   this->renderables.clear();
 }
 
-void Engine::initOpenGL() const {
-  glfwInit();
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-}
+void Engine::initOpenGL() const { glfwInit(); }
 
 void frameBufferSizeCallback(GLFWwindow* window, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
 void Engine::initWindow() {
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
   this->window =
       glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "OpenGL", nullptr, nullptr);
 

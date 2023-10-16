@@ -43,9 +43,7 @@ Renderable::Renderable(const std::vector<Vertex>& vertices,
   glBindVertexArray(0);
 
   // setting textures
-  this->textureID = this->setUpTexture(texturePath);
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, this->textureID);
+  this->texture = new Texture(texturePath);
 
   // add myself to the renderer array
   Engine::getInstance()->addRenderable(this);
@@ -55,7 +53,7 @@ Renderable::~Renderable() {
   glDeleteVertexArrays(1, &this->VAO);
   glDeleteBuffers(1, &this->VBO);
   glDeleteBuffers(1, &this->EBO);
-  glDeleteTextures(1, &this->textureID);
+  delete this->texture;
 }
 
 unsigned int Renderable::getVAO() const { return this->VAO; }
@@ -63,44 +61,6 @@ unsigned int Renderable::getVAO() const { return this->VAO; }
 unsigned int Renderable::getVBO() const { return this->VBO; }
 
 unsigned int Renderable::getEBO() const { return this->EBO; }
-
-unsigned int Renderable::setUpTexture(std::string path) {
-  unsigned int texture;
-  int height, width, nrChannels;
-
-  stbi_set_flip_vertically_on_load(true);
-
-  unsigned char* data =
-      stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-
-  if (!data) {
-    std::cerr << "Failed to load texture: " << path << std::endl;
-    return 0;
-  }
-
-  glGenTextures(1, &texture);
-  glBindTexture(GL_TEXTURE_2D, texture);
-
-  GLenum format;
-  if (nrChannels == 1) {
-    format = GL_RED;
-  } else if (nrChannels == 3) {
-    format = GL_RGB;
-  } else if (nrChannels == 4) {
-    format = GL_RGBA;
-  } else {
-    std::cerr << "Unsupported number of channels: " << nrChannels << std::endl;
-    return 0;
-  }
-
-  glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format,
-               GL_UNSIGNED_BYTE, data);
-  glGenerateMipmap(GL_TEXTURE_2D);
-
-  stbi_image_free(data);
-
-  return texture;
-}
 
 const std::vector<Vertex>& Renderable::getVertices() const {
   return this->vertices;

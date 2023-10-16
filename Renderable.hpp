@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Engine.hpp"
+#include "Texture.hpp"
 
 struct Vertex {
   float x, y, z;  // positions
@@ -38,7 +39,7 @@ class Renderable {
   unsigned int VAO;
   unsigned int VBO;
   unsigned int EBO;
-  unsigned int textureID;
+  Texture* texture;
 
   const std::vector<Vertex> vertices;
   const std::vector<index> indices;

@@ -3,6 +3,7 @@
 
 int main() {
   Engine* engine = Engine::getInstance();
+
   new ChessBoard("textures/chessboard.png");
 
   engine->run();

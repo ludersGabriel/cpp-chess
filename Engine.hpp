@@ -12,12 +12,7 @@ class Renderer;
 class Engine {
  public:
   void run();
-  void initOpenGL() const;
-  void initWindow();
-  void initGlad() const;
-  void processInput() const;
   void addRenderable(const Renderable* go);
-  void clearRenderables();
 
   static Engine* getInstance();
   static void shutdown();
@@ -37,6 +32,12 @@ class Engine {
   std::vector<const Renderable*> renderables;
 
   GLFWwindow* window;
+
+  void initOpenGL() const;
+  void initWindow();
+  void initGlad() const;
+  void processInput() const;
+  void clearRenderables();
 };
 
 #endif
