@@ -5,7 +5,7 @@ ChessBoard::ChessBoard() {
     for (int col = 0; col < BOARD_SIZE; ++col) {
       glm::vec3 position(col * QUAD_SIZE - BOARD_OFFSET,
                          row * QUAD_SIZE - BOARD_OFFSET, 0.0f);
-      glm::vec3 color = (row + col) % 2 == 0 ? lightSquare : darkSquare;
+      glm::vec3 color = (row + col) % 2 != 0 ? lightSquare : darkSquare;
 
       std::vector<Vertex> vertices = {
           {position.x, position.y, 0.0f, 0.0f, 0.0f},
