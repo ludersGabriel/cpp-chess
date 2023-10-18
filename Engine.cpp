@@ -51,7 +51,7 @@ void Engine::initWindow() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   this->window =
-      glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "OpenGL", nullptr, nullptr);
+      glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Chess", nullptr, nullptr);
 
   if (this->window == nullptr) {
     std::cerr << "Failed to create GLFW window" << std::endl;

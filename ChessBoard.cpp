@@ -1,23 +1,24 @@
 #include "ChessBoard.hpp"
 
-ChessBoard::ChessBoard(std::string texturePath)
-    : Renderable(this->generateVertices(), this->generateIndices(),
-                 texturePath) {}
+ChessBoard::ChessBoard() {
+  for (int row = 0; row < BOARD_SIZE; ++row) {
+    for (int col = 0; col < BOARD_SIZE; ++col) {
+      glm::vec3 position(col * QUAD_SIZE - BOARD_OFFSET,
+                         row * QUAD_SIZE - BOARD_OFFSET, 0.0f);
+      glm::vec3 color = (row + col) % 2 == 0 ? lightSquare : darkSquare;
 
-const std::vector<Vertex> ChessBoard::generateVertices() const {
-  return {
-      // Positions         // Texture Coords
-      {-1.0f, 1.0f, 0.0f, 0.0f, 1.0f},  // Top-left
-      {1.0f, 1.0f, 0.0f, 1.0f, 1.0f},   // Top-right
-      {1.0f, -1.0f, 0.0f, 1.0f, 0.0f},  // Bottom-right
-      {-1.0f, -1.0f, 0.0f, 0.0f, 0.0f}  // Bottom-left
-  };
-}
+      std::vector<Vertex> vertices = {
+          {position.x, position.y, 0.0f, 0.0f, 0.0f},
+          {position.x + QUAD_SIZE, position.y, 0.0f, 1.0f, 0.0f},
+          {position.x + QUAD_SIZE, position.y + QUAD_SIZE, 0.0f, 1.0f, 1.0f},
+          {position.x, position.y + QUAD_SIZE, 0.0f, 0.0f, 1.0f}};
 
-const std::vector<index> ChessBoard::generateIndices() const {
-  // Define indices for the two triangles of the quad.
-  return {
-      0, 1, 2,  // First Triangle
-      2, 3, 0   // Second Triangle
-  };
+      std::vector<index> indices = {0, 1, 2, 2, 3, 0};
+
+      Renderable* quad = new Renderable(vertices, indices, "", position,
+                                        glm::vec3(QUAD_SIZE, QUAD_SIZE, 1.0f),
+                                        glm::vec3(0.0f), color, true);
+      this->squares.push_back(quad);
+    }
+  }
 }

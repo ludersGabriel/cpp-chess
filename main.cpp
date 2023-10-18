@@ -4,11 +4,12 @@
 int main() {
   Engine* engine = Engine::getInstance();
 
-  new ChessBoard("textures/chessboard.png");
+  ChessBoard* board = new ChessBoard();
 
   engine->run();
 
   engine->shutdown();
 
+  delete board;
   return 0;
 }

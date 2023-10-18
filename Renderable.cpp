@@ -8,12 +8,15 @@ Renderable::Renderable(const std::vector<Vertex>& vertices,
                        const std::vector<index>& indices,
                        const std::string& texturePath,
                        const glm::vec3& position, const glm::vec3& scale,
-                       const glm::vec3& rotation)
+                       const glm::vec3& rotation, const glm::vec3& color,
+                       const bool onlyColor)
     : vertices{vertices},
       indices{indices},
       position{position},
       scale{scale},
-      rotation{rotation} {
+      rotation{rotation},
+      color{color},
+      onlyColor{onlyColor} {
   glGenVertexArrays(1, &this->VAO);
   glGenBuffers(1, &this->VBO);
   glGenBuffers(1, &this->EBO);
@@ -42,8 +45,10 @@ Renderable::Renderable(const std::vector<Vertex>& vertices,
   // unbinding the VAO
   glBindVertexArray(0);
 
-  // setting textures
-  this->texture = new Texture(texturePath);
+  if (!onlyColor) {
+    // setting textures
+    this->texture = new Texture(texturePath);
+  }
 
   // add myself to the renderer array
   Engine::getInstance()->addRenderable(this);
@@ -53,7 +58,8 @@ Renderable::~Renderable() {
   glDeleteVertexArrays(1, &this->VAO);
   glDeleteBuffers(1, &this->VBO);
   glDeleteBuffers(1, &this->EBO);
-  delete this->texture;
+
+  if (!this->onlyColor) delete this->texture;
 }
 
 unsigned int Renderable::getVAO() const { return this->VAO; }
@@ -69,3 +75,7 @@ const std::vector<Vertex>& Renderable::getVertices() const {
 const std::vector<index>& Renderable::getIndices() const {
   return this->indices;
 }
+
+const glm::vec3& Renderable::getColor() const { return this->color; }
+
+const bool Renderable::getOnlyColor() const { return this->onlyColor; }

@@ -22,15 +22,17 @@ class Renderable {
              const std::vector<index>& indices, const std::string& texturePath,
              const glm::vec3& position = glm::vec3(0.0f),
              const glm::vec3& scale = glm::vec3(1.0f),
-             const glm::vec3& rotation = glm::vec3(0.0f));
+             const glm::vec3& rotation = glm::vec3(0.0f),
+             const glm::vec3& color = glm::vec3(1.0f),
+             const bool onlyColor = false);
   virtual ~Renderable();
 
   unsigned int getVAO() const;
   unsigned int getVBO() const;
   unsigned int getEBO() const;
 
-  // TODO: ask about this in class
-  unsigned int setUpTexture(std::string path);
+  const glm::vec3& getColor() const;
+  const bool getOnlyColor() const;
 
   const std::vector<Vertex>& getVertices() const;
   const std::vector<index>& getIndices() const;
@@ -47,6 +49,8 @@ class Renderable {
   glm::vec3 position;
   glm::vec3 scale;
   glm::vec3 rotation;
+  glm::vec3 color;
+  bool onlyColor;
 };
 
 #endif

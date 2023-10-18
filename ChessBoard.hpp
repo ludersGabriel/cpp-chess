@@ -3,19 +3,27 @@
 
 #include "Renderable.hpp"
 #include "Engine.hpp"
+
+#include <glm/glm.hpp>
 #include <string>
 #include <vector>
 
-class ChessBoard : public Renderable {
+class ChessBoard {
  public:
-  ChessBoard(const std::string texturePath);
+  ChessBoard();
   virtual ~ChessBoard() = default;
 
-  const std::vector<Vertex> generateVertices() const;
-  const std::vector<index> generateIndices() const;
-
  private:
-  std::string texturePath;
+  static constexpr int BOARD_SIZE = 8;
+  static constexpr float QUAD_SIZE = .125f;
+  static constexpr float BOARD_OFFSET = 0.5f;
+
+  const glm::vec3 lightSquare = glm::vec3(236, 229, 203);
+  const glm::vec3 lightDanger = glm::vec3(215, 80, 62);
+  const glm::vec3 darkSquare = glm::vec3(0, 134, 125);
+  const glm::vec3 darkDanger = glm::vec3(168, 49, 49);
+
+  std::vector<const Renderable*> squares;
 };
 
 #endif
