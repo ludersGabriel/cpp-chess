@@ -1,6 +1,8 @@
 #include "Renderer.hpp"
 #include <glad/glad.h>
 
+#include <iostream>
+
 Renderer::Renderer() : shader{new Shader()} {}
 
 Renderer::~Renderer() { delete shader; }
@@ -9,6 +11,7 @@ void Renderer::draw(const Renderable& object) {
   shader->use();
 
   shader->setBool("onlyColor", object.getOnlyColor());
+
   shader->setVec3("color", object.getColor());
 
   glm::mat4 modelMatrix = object.getTransform()->getTransformationMatrix();
