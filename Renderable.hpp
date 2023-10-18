@@ -8,6 +8,7 @@
 
 #include "Engine.hpp"
 #include "Texture.hpp"
+#include "Transform.hpp"
 
 struct Vertex {
   float x, y, z;  // positions
@@ -37,6 +38,8 @@ class Renderable {
   const std::vector<Vertex>& getVertices() const;
   const std::vector<index>& getIndices() const;
 
+  const Transform* const getTransform() const;
+
  protected:
   unsigned int VAO;
   unsigned int VBO;
@@ -46,9 +49,7 @@ class Renderable {
   const std::vector<Vertex> vertices;
   const std::vector<index> indices;
 
-  glm::vec3 position;
-  glm::vec3 scale;
-  glm::vec3 rotation;
+  Transform* transform;
   glm::vec3 color;
   bool onlyColor;
 };

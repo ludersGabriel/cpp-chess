@@ -12,9 +12,7 @@ Renderable::Renderable(const std::vector<Vertex>& vertices,
                        const bool onlyColor)
     : vertices{vertices},
       indices{indices},
-      position{position},
-      scale{scale},
-      rotation{rotation},
+      transform{new Transform{position, scale, rotation}},
       color{color},
       onlyColor{onlyColor} {
   glGenVertexArrays(1, &this->VAO);
@@ -60,6 +58,7 @@ Renderable::~Renderable() {
   glDeleteBuffers(1, &this->EBO);
 
   if (!this->onlyColor) delete this->texture;
+  delete this->transform;
 }
 
 unsigned int Renderable::getVAO() const { return this->VAO; }
@@ -79,3 +78,7 @@ const std::vector<index>& Renderable::getIndices() const {
 const glm::vec3& Renderable::getColor() const { return this->color; }
 
 const bool Renderable::getOnlyColor() const { return this->onlyColor; }
+
+const Transform* const Renderable::getTransform() const {
+  return this->transform;
+}

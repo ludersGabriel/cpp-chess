@@ -23,12 +23,12 @@ class Engine {
 
   static Engine* instance;
 
-  static constexpr int WINDOW_WIDTH = 1280;
-  static constexpr int WINDOW_HEIGHT = 720;
+  static constexpr int WINDOW_WIDTH = 800;
+  static constexpr int WINDOW_HEIGHT = 800;
+  float aspectRatio = (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT;
 
   Renderer* renderer;
 
-  unsigned int chessboardTexture;
   std::vector<const Renderable*> renderables;
 
   GLFWwindow* window;
@@ -38,6 +38,9 @@ class Engine {
   void initGlad() const;
   void processInput() const;
   void clearRenderables();
+
+  static void frameBufferSizeCallback(GLFWwindow* window, int width,
+                                      int height);
 };
 
 #endif

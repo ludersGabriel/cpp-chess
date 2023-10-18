@@ -16,7 +16,7 @@ ChessBoard::ChessBoard() {
       std::vector<index> indices = {0, 1, 2, 2, 3, 0};
 
       Renderable* quad = new Renderable(vertices, indices, "", position,
-                                        glm::vec3(QUAD_SIZE, QUAD_SIZE, 1.0f),
+                                        glm::vec3(1.8f, 1.8f, 1.0f),
                                         glm::vec3(0.0f), color, true);
       this->squares.push_back(quad);
     }

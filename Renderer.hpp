@@ -12,9 +12,6 @@ class Renderer {
   void draw(const Renderable& object);
   void clear();
 
-  void setProjectionMatrix(const glm::mat4& projectionMatrix) const;
-  void setModelMatrix(const glm::mat4& modelMatrix) const;
-
  private:
   Shader* shader;
 };

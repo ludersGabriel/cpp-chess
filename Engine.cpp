@@ -40,8 +40,17 @@ void Engine::clearRenderables() {
 
 void Engine::initOpenGL() const { glfwInit(); }
 
-void frameBufferSizeCallback(GLFWwindow* window, int width, int height) {
-  glViewport(0, 0, width, height);
+void Engine::frameBufferSizeCallback(GLFWwindow* window, int width,
+                                     int height) {
+  Engine* engine = Engine::getInstance();
+  engine->aspectRatio = (float)width / (float)height;
+
+  int sideLength = width < height ? width : height;
+
+  int xOffset = (width - sideLength) / 2;
+  int yOffset = (height - sideLength) / 2;
+
+  glViewport(xOffset, yOffset, sideLength, sideLength);
 }
 
 void Engine::initWindow() {
@@ -65,7 +74,7 @@ void Engine::initWindow() {
   this->initGlad();
 
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-  glfwSetFramebufferSizeCallback(this->window, frameBufferSizeCallback);
+  glfwSetFramebufferSizeCallback(this->window, this->frameBufferSizeCallback);
 }
 
 void Engine::initGlad() const {

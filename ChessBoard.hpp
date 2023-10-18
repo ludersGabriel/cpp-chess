@@ -16,7 +16,7 @@ class ChessBoard {
  private:
   static constexpr int BOARD_SIZE = 8;
   static constexpr float QUAD_SIZE = .125f;
-  static constexpr float BOARD_OFFSET = 0.5f;
+  static constexpr float BOARD_OFFSET = 0.5;
 
   const glm::vec3 lightSquare = glm::vec3(236, 229, 203);
   const glm::vec3 lightDanger = glm::vec3(215, 80, 62);
