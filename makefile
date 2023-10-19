@@ -1,7 +1,7 @@
 parametrosCompilacao=-Wall -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -g
 gg=gg
 
-OBJ = main.o glad.o stb_image.o Engine.o Shader.o Renderable.o ChessBoard.o Renderer.o Texture.o Transform.o
+OBJ = main.o glad.o stb_image.o Engine.o Shader.o Renderable.o ChessBoard.o Renderer.o Texture.o Transform.o Square.o
 
 all: $(gg)
 
@@ -37,6 +37,9 @@ Texture.o: Texture.cpp Texture.hpp
 
 Transform.o: Transform.cpp Transform.hpp
 	g++ -c Transform.cpp -Iinclude $(parametrosCompilacao)
+
+Square.o: Square.cpp Square.hpp
+	g++ -c Square.cpp -Iinclude $(parametrosCompilacao)
 
 run:
 	./$(gg)
