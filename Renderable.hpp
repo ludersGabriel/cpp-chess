@@ -46,12 +46,14 @@ class Renderable {
   unsigned int EBO;
   Texture* texture;
 
-  const std::vector<Vertex> vertices;
-  const std::vector<index> indices;
+  std::vector<Vertex> vertices;
+  std::vector<index> indices;
 
   Transform* transform;
   glm::vec3 color;
   bool onlyColor;
+
+  void updateVertexData(const std::vector<Vertex>& newVertices);
 };
 
 #endif

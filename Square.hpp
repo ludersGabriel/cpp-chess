@@ -6,15 +6,13 @@
 class Square : public Renderable {
  public:
   Square(const unsigned int rank, const unsigned int file,
-         const glm::vec3 position);
+         const glm::vec3 position, const float quadSize);
 
   virtual ~Square() = default;
 
-  static float getQuadSize();
+  float getQuadSize();
 
  private:
-  static constexpr float QUAD_SIZE = .125f;  // 1.0 / 8.0
-
   static const glm::vec3 lightSquare;
   static const glm::vec3 lightDanger;
   static const glm::vec3 darkSquare;
@@ -23,8 +21,10 @@ class Square : public Renderable {
   unsigned int rank;  // linha
   unsigned int file;  // coluna
   bool isLight;
+  float quadSize;
 
-  const std::vector<Vertex> getSquareVertices(const glm::vec3 position) const;
+  const std::vector<Vertex> getSquareVertices(const glm::vec3 position,
+                                              const float quadSize) const;
   const std::vector<index> getSquareIndices() const;
   const glm::vec3 getSquareColor(const unsigned int rank,
                                  const unsigned int file) const;

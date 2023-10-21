@@ -82,3 +82,22 @@ const bool Renderable::getOnlyColor() const { return this->onlyColor; }
 const Transform* const Renderable::getTransform() const {
   return this->transform;
 }
+
+void Renderable::updateVertexData(const std::vector<Vertex>& newVertices) {
+  this->vertices = newVertices;
+
+  glBindVertexArray(this->VAO);
+  glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+
+  // Re-upload the new vertex data to the VBO (updating gpu memory)
+  glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(Vertex),
+               &vertices[0], GL_STATIC_DRAW);
+
+  // Optionally, if indices change as well:
+  // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
+  // glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() *
+  // sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+
+  // Unbind the VAO to be safe
+  glBindVertexArray(0);
+}

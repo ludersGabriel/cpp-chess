@@ -40,27 +40,16 @@ void Engine::clearRenderables() {
 
 void Engine::initOpenGL() const { glfwInit(); }
 
-void Engine::frameBufferSizeCallback(GLFWwindow* window, int width,
-                                     int height) {
-  Engine* engine = Engine::getInstance();
-  engine->aspectRatio = (float)width / (float)height;
-
-  int sideLength = width < height ? width : height;
-
-  int xOffset = (width - sideLength) / 2;
-  int yOffset = (height - sideLength) / 2;
-
-  glViewport(xOffset, yOffset, sideLength, sideLength);
-}
-
 void Engine::initWindow() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  this->window =
-      glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Chess", nullptr, nullptr);
+  glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+  this->window = glfwCreateWindow(this->windowWidth, this->windowHeight,
+                                  "Chess", nullptr, nullptr);
 
   if (this->window == nullptr) {
     std::cerr << "Failed to create GLFW window" << std::endl;
@@ -73,8 +62,7 @@ void Engine::initWindow() {
 
   this->initGlad();
 
-  glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-  glfwSetFramebufferSizeCallback(this->window, this->frameBufferSizeCallback);
+  glViewport(0, 0, this->windowWidth, this->windowHeight);
 }
 
 void Engine::initGlad() const {
@@ -120,3 +108,7 @@ Engine* Engine::getInstance() {
 
   return instance;
 }
+
+int Engine::getWindowWidth() const { return this->windowWidth; }
+
+int Engine::getWindowHeight() const { return this->windowHeight; }

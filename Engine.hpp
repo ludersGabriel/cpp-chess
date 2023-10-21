@@ -3,7 +3,6 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
 #include <vector>
 
 class Renderable;
@@ -17,18 +16,19 @@ class Engine {
   static Engine* getInstance();
   static void shutdown();
 
+  int getWindowWidth() const;
+  int getWindowHeight() const;
+
  private:
   Engine();
   virtual ~Engine();
 
   static Engine* instance;
 
-  static constexpr int WINDOW_WIDTH = 800;
-  static constexpr int WINDOW_HEIGHT = 800;
-  float aspectRatio = (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT;
+  int windowWidth = 1600;
+  int windowHeight = 900;
 
   Renderer* renderer;
-
   std::vector<const Renderable*> renderables;
 
   GLFWwindow* window;

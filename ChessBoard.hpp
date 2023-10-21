@@ -2,7 +2,6 @@
 #define CHESS_BOARD_HPP
 
 #include "Square.hpp"
-#include "Engine.hpp"
 
 #include <glm/glm.hpp>
 #include <string>
@@ -14,9 +13,9 @@ class ChessBoard {
   virtual ~ChessBoard() = default;
 
  private:
-  static constexpr float BOARD_OFFSET = 0.5;
+  static constexpr float boardSize = 8.0f;
 
-  std::vector<const Square*> squares;
+  std::vector<Square*> squares;
 };
 
 #endif

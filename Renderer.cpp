@@ -1,9 +1,14 @@
 #include "Renderer.hpp"
 #include <glad/glad.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+// #include <glm/gtx/string_cast.hpp>
 #include <iostream>
 
-Renderer::Renderer() : shader{new Shader()} {}
+Renderer::Renderer() : shader{new Shader()} {
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+}
 
 Renderer::~Renderer() { delete shader; }
 
@@ -14,8 +19,16 @@ void Renderer::draw(const Renderable& object) {
 
   shader->setVec3("color", object.getColor());
 
-  glm::mat4 modelMatrix = object.getTransform()->getTransformationMatrix();
-  shader->setMat4("transformation", modelMatrix);
+  glm::mat4 model = glm::mat4(1.0f);
+  model = glm::translate(model, object.getTransform()->getPosition());
+  shader->setMat4("model", model);
+
+  glm::mat4 view = glm::mat4(1.0f);
+  view = glm::translate(view, glm::vec3{0.0f, 0.0f, -3.0f});
+  shader->setMat4("view", view);
+
+  glm::mat4 projection = glm::ortho(0.0f, 1600.0f, 0.0f, 900.0f, 0.1f, 100.0f);
+  shader->setMat4("projection", projection);
 
   glBindVertexArray(object.getVAO());
   glDrawElements(GL_TRIANGLES, object.getIndices().size(), GL_UNSIGNED_INT, 0);

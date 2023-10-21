@@ -12,17 +12,18 @@ const glm::vec3 Square::darkDanger =
     glm::vec3(168.0f / 255.0f, 49.0f / 255.0f, 49.0f / 255.0f);
 
 Square::Square(const unsigned int rank, const unsigned int file,
-               const glm::vec3 position)
-    : Renderable{this->getSquareVertices(position),
+               const glm::vec3 position, const float quadSize)
+    : Renderable{this->getSquareVertices(position, quadSize),
                  this->getSquareIndices(),
                  "",
                  position,
-                 glm::vec3(1.8f, 1.8f, 1.0f),
+                 glm::vec3(1.0f, 1.0f, 1.0f),
                  glm::vec3(0.0f),
                  this->getSquareColor(rank, file),
                  true},
-      rank(rank),
-      file(file) {
+      rank{rank},
+      file{file},
+      quadSize{quadSize} {
   this->isLight = (rank + file) % 2 != 0;
 }
 
@@ -31,14 +32,15 @@ const std::vector<index> Square::getSquareIndices() const {
 }
 
 const std::vector<Vertex> Square::getSquareVertices(
-    const glm::vec3 position) const {
-  return {{position.x, position.y, 0.0f, 0.0f, 0.0f},
-          {position.x + QUAD_SIZE, position.y, 0.0f, 1.0f, 0.0f},
-          {position.x + QUAD_SIZE, position.y + QUAD_SIZE, 0.0f, 1.0f, 1.0f},
-          {position.x, position.y + QUAD_SIZE, 0.0f, 0.0f, 1.0f}};
+    const glm::vec3 position, const float quadSize) const {
+  float halfSize = quadSize / 2.0f;  // Half the size of a square
+  return {{halfSize, halfSize, 0.0f, 0.0f, 0.0f},
+          {halfSize, -halfSize, 0.0f, 1.0f, 0.0f},
+          {-halfSize, -halfSize, 0.0f, 1.0f, 1.0f},
+          {-halfSize, halfSize, 0.0f, 0.0f, 1.0f}};
 }
 
-float Square::getQuadSize() { return QUAD_SIZE; }
+float Square::getQuadSize() { return this->quadSize; }
 
 const glm::vec3 Square::getSquareColor(const unsigned int rank,
                                        const unsigned int file) const {
