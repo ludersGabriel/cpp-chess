@@ -1,15 +1,9 @@
-#include "Engine.hpp"
-#include "ChessBoard.hpp"
+
+
+#include "iostream"
 
 int main() {
-  Engine* engine = Engine::getInstance();
+  std::cout << "hello fellas\n";
 
-  ChessBoard* board = new ChessBoard();
-
-  engine->run();
-
-  engine->shutdown();
-
-  delete board;
   return 0;
 }
