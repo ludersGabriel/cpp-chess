@@ -1,4 +1,4 @@
-parametrosCompilacao=-Wall
+parametrosCompilacao=-Wall -std=c++20
 gg=gg
 
 OBJ = main.o Bishop.o Board.o King.o Knight.o Pawn.o Piece.o Queen.o Rook.o Square.o Game.o Player.o Cpu.o
