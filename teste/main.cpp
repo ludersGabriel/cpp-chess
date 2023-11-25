@@ -1,8 +1,9 @@
+#include <boost/process.hpp>
 #include <iostream>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <cstring>
+#include <string>
 #include <array>
+
+namespace bp = boost::process;
 
 using ChessBoard = std::array<std::array<char, 8>, 8>;
 
@@ -28,35 +29,11 @@ std::string convertMatrixToFen(const ChessBoard& board, char turn) {
   }
   fen.pop_back();  // Remove the last '/'
   fen += ' ';
-  fen += turn;           // Add whose turn it is
+  fen += turn;  // Add whose turn it is
+
+  // ! REDO, ITS FIXED RIGHT NOW
   fen += " KQkq - 0 1";  // Adding some defaults for the remaining FEN sections
   return fen;
-}
-
-// Function to execute commands and get response from Stockfish
-std::string execCommand(int toStockfish[2], int fromStockfish[2],
-                        const std::string& command) {
-  write(toStockfish[1], command.c_str(),
-        command.size());           // Send command to Stockfish
-  write(toStockfish[1], "\n", 1);  // End of command
-
-  // Read from Stockfish
-  std::string output;
-  char buffer[256];
-  ssize_t nbytes;
-  while ((nbytes = read(fromStockfish[0], buffer, sizeof(buffer) - 1)) > 0) {
-    buffer[nbytes] = '\0';  // null-terminate the string
-    output += buffer;
-
-    // If the last line of the output is "readyok" or contains "bestmove", we
-    // can stop reading
-    if (output.find("readyok") != std::string::npos ||
-        output.find("bestmove") != std::string::npos) {
-      break;
-    }
-  }
-
-  return output;
 }
 
 int main() {
@@ -70,64 +47,49 @@ int main() {
                        {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}}};
   char turn = 'w';  // White to move
 
-  int toStockfish[2], fromStockfish[2];
-  pid_t pid;
+  // Convert the board to a FEN string
+  std::string fen = convertMatrixToFen(board, turn);
+  std::cout << "FEN: " << fen << std::endl;
 
-  // Create the pipes
-  if (pipe(toStockfish) < 0 || pipe(fromStockfish) < 0) {
-    std::cerr << "Failed to create pipes." << std::endl;
-    return 1;
+  // Set up pipes for the child process's stdin and stdout
+  bp::opstream in;   // sending to stockfish
+  bp::ipstream out;  // receiving from stockfish
+  std::string line;
+
+  // Start the Stockfish process
+  bp::child c("../stockfish/stockfish-ubuntu-x86-64-avx2",
+              bp::std_in<in, bp::std_out> out);
+
+  // Send "uci" command to Stockfish to initialize it
+  in << "uci\n";
+  in.flush();
+
+  // Read the output from Stockfish
+  while (std::getline(out, line) && line != "uciok") {
+    std::cout << line << std::endl;
+  }
+  std::cout << "Received uciok, Stockfish is ready." << std::endl;
+
+  // Set up the position and ask Stockfish to make a move within 1000
+  // milliseconds (1 second)
+  in << "position fen " << fen << "\n";
+  in << "go movetime 1000\n";  // Stockfish will search for 1 second
+  in.flush();
+
+  // Read the output from Stockfish
+  while (std::getline(out, line)) {
+    if (line.find("bestmove") != std::string::npos) {
+      // Extract the best move from the line
+      std::string bestMove = line.substr(9, line.find(' ', 9) - 9);
+      std::cout << "Best move: " << bestMove << std::endl;
+      break;
+    }
   }
 
-  // Fork the process
-  pid = fork();
-  if (pid < 0) {
-    std::cerr << "Failed to fork." << std::endl;
-    return 1;
-  }
-
-  if (pid == 0) {  // Child process
-    // Redirect standard input to the read end of the pipe to Stockfish
-    dup2(toStockfish[0], STDIN_FILENO);
-    close(toStockfish[0]);
-    close(toStockfish[1]);  // No longer need this end of the pipe
-
-    // Redirect standard output to the write end of the pipe from Stockfish
-    dup2(fromStockfish[1], STDOUT_FILENO);
-    close(fromStockfish[0]);  // No longer need this end of the pipe
-    close(fromStockfish[1]);
-
-    // Execute Stockfish
-    execlp("../stockfish/stockfish-ubuntu-x86-64-avx2",
-           "stockfish-ubuntu-x86-64-avx2", (char*)NULL);
-
-    // execlp only returns if there is an error
-    std::cerr << "Failed to execute Stockfish." << std::endl;
-    exit(1);
-  } else {                    // Parent process
-    close(toStockfish[0]);    // Close the read end of the pipe to Stockfish
-    close(fromStockfish[1]);  // Close the write end of the pipe from Stockfish
-
-    // Send "uci" command to Stockfish to initialize it
-    execCommand(toStockfish, fromStockfish, "uci");
-
-    // Main game loop - For demonstration, we'll just do one iteration
-    std::string fen = convertMatrixToFen(board, turn);
-    std::string stockfishCommand = "position fen " + fen;
-    execCommand(toStockfish, fromStockfish, stockfishCommand);
-
-    // Get the best move
-    std::string bestMove = execCommand(toStockfish, fromStockfish, "go");
-    std::cout << "Best move: " << bestMove << std::endl;
-
-    // Tell Stockfish to quit and close the pipes
-    execCommand(toStockfish, fromStockfish, "quit");
-    close(toStockfish[1]);
-    close(fromStockfish[0]);
-
-    // Wait for the Stockfish process to exit
-    waitpid(pid, NULL, 0);
-  }
+  // Stop the Stockfish engine
+  in << "quit\n";
+  in.flush();
+  c.wait();  // Wait for the child process to exit
 
   return 0;
 }
