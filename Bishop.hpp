@@ -12,6 +12,8 @@ class Bishop : public Piece {
   Bishop(Square* square, const EnumFenRepresentation& fenRepresentation);
   virtual ~Bishop() = default;
 
+  int getValue() const override;
+
  private:
   constexpr static int value = 3;
 };

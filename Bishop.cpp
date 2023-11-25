@@ -3,4 +3,6 @@
 using namespace chess;
 
 Bishop::Bishop(Square* square, const EnumFenRepresentation& fenRepresentation)
-    : Piece(square, this->value, fenRepresentation) {}
+    : Piece(square, fenRepresentation) {}
+
+int Bishop::getValue() const { return Bishop::value; }

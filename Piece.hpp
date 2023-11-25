@@ -11,22 +11,21 @@ namespace chess {
 class Piece {
  public:
   Piece() = default;
-  Piece(Square *square, const int value, const EnumFenRepresentation &rep);
+  Piece(Square *square, const EnumFenRepresentation &rep);
   virtual ~Piece() = default;
 
   EnumPiecesColors getColor() const;
-  int getValue() const;
 
   Square *getLocation() const;
   void setLocation(Square *square);
 
   EnumFenRepresentation getFen() const;
 
+  virtual int getValue() const = 0;
   //   virtual std::vector<Square> const &possibleMoves(Square *square) const =
   //   0;
 
  private:
-  int value;
   EnumPiecesColors pieceColor;
   Square *location;
 
