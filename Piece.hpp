@@ -24,7 +24,7 @@ class Piece {
   EnumFenRepresentation getFen() const;
 
   virtual int getValue() const = 0;
-  virtual std::vector<std::string> const &possibleMoves() const = 0;
+  virtual std::vector<std::string> possibleMoves() const = 0;
 
  private:
   EnumPiecesColors pieceColor;

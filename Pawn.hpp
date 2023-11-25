@@ -14,6 +14,8 @@ class Pawn : public Piece {
 
   int getValue() const override;
 
+  std::vector<std::string> possibleMoves() const override;
+
  private:
   constexpr static int value = 1;
 };

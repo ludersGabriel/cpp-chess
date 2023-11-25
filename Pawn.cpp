@@ -7,9 +7,7 @@ Pawn::Pawn(Square* square, const EnumFenRepresentation& fenRepresentation)
 
 int Pawn::getValue() const { return Pawn::value; }
 
-std::vector<std::string> const & Pawn::possibleMoves() const{
-
-    std::string baseFile = (getLocation())->getFile();
-    std::string baseRank = (getLocation())->getFile();
-
+std::vector<std::string> Pawn::possibleMoves() const {
+  std::string baseFile = (getLocation())->getFile();
+  std::string baseRank = (getLocation())->getFile();
 }
