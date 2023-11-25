@@ -9,9 +9,23 @@ std::unique_ptr<Piece> PieceFactory::createPiece(
     case EnumFenRepresentation::WHITE_BISHOP:
     case EnumFenRepresentation::BLACK_BISHOP:
       return std::make_unique<Bishop>(square, fenRepresentation);
-    // ... Add cases for other piece types
+    case EnumFenRepresentation::WHITE_KING:
+    case EnumFenRepresentation::BLACK_KING:
+      return std::make_unique<King>(square, fenRepresentation);
+    case EnumFenRepresentation::WHITE_KNIGHT:
+    case EnumFenRepresentation::BLACK_KNIGHT:
+      return std::make_unique<Knight>(square, fenRepresentation);
+    case EnumFenRepresentation::WHITE_PAWN:
+    case EnumFenRepresentation::BLACK_PAWN:
+      return std::make_unique<Pawn>(square, fenRepresentation);
+    case EnumFenRepresentation::WHITE_QUEEN:
+    case EnumFenRepresentation::BLACK_QUEEN:
+      return std::make_unique<Queen>(square, fenRepresentation);
+    case EnumFenRepresentation::WHITE_ROOK:
+    case EnumFenRepresentation::BLACK_ROOK:
+      return std::make_unique<Rook>(square, fenRepresentation);
+
     default:
-      // Handle unexpected fenRepresentation values
       return nullptr;
   }
 }

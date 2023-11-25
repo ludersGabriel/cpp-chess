@@ -10,4 +10,8 @@ int Pawn::getValue() const { return Pawn::value; }
 std::vector<std::string> Pawn::possibleMoves() const {
   std::string baseFile = (getLocation())->getFile();
   std::string baseRank = (getLocation())->getFile();
+
+  std::vector<std::string> possibleMoves;
+
+  return possibleMoves;
 }

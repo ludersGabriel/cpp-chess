@@ -5,7 +5,10 @@
 
 using namespace chess;
 
-Game::Game() : cpu{std::make_unique<Cpu>()}, turn{EnumPiecesColors::WHITE} {}
+Game::Game()
+    : board{std::make_unique<Board>()},
+      cpu{std::make_unique<Cpu>()},
+      turn{EnumPiecesColors::WHITE} {}
 
 void Game::run() {
   Interface::clearScreen();
@@ -22,14 +25,14 @@ void Game::run() {
 
   this->cpu->setColor(this->playerColor);
 
-  while (response != "quit") {
-    Interface::clearScreen();
-    if (this->turn == this->playerColor) {
-      response = Interface::getUserCommand();
-    } else {
-      // response = this->cpu->getMove();
-    }
-  }
+  // while (response != "quit") {
+  //   Interface::clearScreen();
+  //   if (this->turn == this->playerColor) {
+  //     response = Interface::getUserCommand();
+  //   } else {
+  //     // response = this->cpu->getMove();
+  //   }
+  // }
 
   Interface::farewell();
 }
