@@ -1,24 +1,23 @@
 #include "Piece.hpp"
 
-namespace chess{
+namespace chess {
 
-Piece::Piece(Square *square, const int value, const EnumPiecesColors color)
-    : location{square}, value{value}, pieceColor{color}  {}
-
-EnumPiecesColors Piece::getColor() const{
-    return this->pieceColor;
+Piece::Piece(Square *square, const int value, const EnumFenRepresentation &rep)
+    : value{value}, location{square} {
+  this->pieceColor = rep >= EnumFenRepresentation::WHITE_BISHOP
+                         ? EnumPiecesColors::WHITE
+                         : EnumPiecesColors::BLACK;
+  fenRep = rep;
 }
 
-int Piece::getValue() const{
-    return this->value;
-}
+EnumPiecesColors Piece::getColor() const { return this->pieceColor; }
 
-Square* Piece::getLocation() const{
-    return this->location;
-}
+int Piece::getValue() const { return this->value; }
 
-void Piece::setLocation(Square *square){
-    this->location = square;
-}
-    
-}
+Square *Piece::getLocation() const { return this->location; }
+
+void Piece::setLocation(Square *square) { this->location = square; }
+
+EnumFenRepresentation Piece::getFen() const { return this->fenRep; }
+
+}  // namespace chess
