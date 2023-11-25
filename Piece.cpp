@@ -2,8 +2,8 @@
 
 namespace chess {
 
-Piece::Piece(Square *square, const int value, const EnumFenRepresentation &rep)
-    : value{value}, location{square} {
+Piece::Piece(Square *square, const EnumFenRepresentation &rep)
+    : location{square} {
   this->pieceColor = rep >= EnumFenRepresentation::WHITE_BISHOP
                          ? EnumPiecesColors::WHITE
                          : EnumPiecesColors::BLACK;
@@ -11,8 +11,6 @@ Piece::Piece(Square *square, const int value, const EnumFenRepresentation &rep)
 }
 
 EnumPiecesColors Piece::getColor() const { return this->pieceColor; }
-
-int Piece::getValue() const { return this->value; }
 
 Square *Piece::getLocation() const { return this->location; }
 

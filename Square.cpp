@@ -3,14 +3,14 @@
 
 namespace chess {
 
-Square::Square(const int file, const int rank, EnumSquareColors color)
+Square::Square(const std::string file, const std::string rank, EnumSquareColors color)
     : file{file}, rank{rank}, squareColor{color} {}
 
-int Square::getFile() const{
+std::string Square::getFile() const{
     return this->file;
 }
 
-int Square::getRank() const{
+std::string Square::getRank() const{
     return this->rank;
 }
 

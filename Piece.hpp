@@ -1,10 +1,12 @@
 #ifndef PIECE_HPP
 #define PIECE_HPP
 
+#include <vector>
+#include <string>
+
 #include "Square.hpp"
 #include "EnumPiecesColors.hpp"
 #include "EnumFenRepresentation.hpp"
-#include <vector>
 
 namespace chess {
 
@@ -22,8 +24,7 @@ class Piece {
   EnumFenRepresentation getFen() const;
 
   virtual int getValue() const = 0;
-  //   virtual std::vector<Square> const &possibleMoves(Square *square) const =
-  //   0;
+  virtual std::vector<std::string> const &possibleMoves() const = 0;
 
  private:
   EnumPiecesColors pieceColor;
