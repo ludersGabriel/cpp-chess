@@ -9,7 +9,7 @@ const std::string Piece::blackColor = "\033[1;30m";
 
 Piece::Piece(std::shared_ptr<Square> square, const EnumFenRepresentation &rep)
     : location{square} {
-  this->pieceColor = rep >= EnumFenRepresentation::WHITE_BISHOP
+  this->pieceColor = rep <= EnumFenRepresentation::WHITE_BISHOP
                          ? EnumPiecesColors::WHITE
                          : EnumPiecesColors::BLACK;
   fenRep = rep;

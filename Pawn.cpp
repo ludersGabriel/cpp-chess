@@ -1,5 +1,4 @@
 #include "Pawn.hpp"
-#include "iostream"
 
 using namespace chess;
 
@@ -9,9 +8,7 @@ Pawn::Pawn(std::shared_ptr<Square> square,
 
 int Pawn::getValue() const { return Pawn::value; }
 
-int Pawn::getValue() const { return Pawn::value; }
-
-bool Pawn::alreadyMove() const{
+bool Pawn::notMovedYet() const{
   return isFirstMove;
 }
 
@@ -40,7 +37,7 @@ std::vector<std::string> Pawn::possibleMoves() const {
   possibleMoves.push_back(uci);
 
   // se é o primeiro movimento, pode se mover duas vezes
-  if(alreadyMove()){
+  if(notMovedYet()){
     uci[1]+=mod;
     possibleMoves.push_back(uci);
     uci[1]-=mod;

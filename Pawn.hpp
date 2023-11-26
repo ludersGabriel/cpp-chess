@@ -17,8 +17,7 @@ class Pawn : public Piece {
 
   int getValue() const override;
 
-  bool alreadyMove() const;
-
+  bool notMovedYet() const;
   std::vector<std::string> possibleMoves() const override;
 
  private:
