@@ -8,7 +8,6 @@
 #include <memory>
 
 namespace chess {
-
 class Pawn : public Piece {
  public:
   Pawn(std::shared_ptr<Square> square,
@@ -18,7 +17,9 @@ class Pawn : public Piece {
   int getValue() const override;
 
   bool notMovedYet() const;
-  std::vector<std::string> possibleMoves() const override;
+  std::vector<std::string> possibleMoves(
+      std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
+      const override;
 
  private:
   constexpr static int value = 1;

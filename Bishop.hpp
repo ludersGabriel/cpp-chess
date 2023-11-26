@@ -16,7 +16,9 @@ class Bishop : public Piece {
 
   int getValue() const override;
 
-  std::vector<std::string> possibleMoves() const override;
+  std::vector<std::string> possibleMoves(
+      std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
+      const override;
 
  private:
   constexpr static int value = 3;

@@ -8,11 +8,11 @@ King::King(std::shared_ptr<Square> square,
 
 int King::getValue() const { return King::value; }
 
-bool King::notMovedYet() const{
-  return isFirstMove;
-}
+bool King::notMovedYet() const { return isFirstMove; }
 
-std::vector<std::string> King::possibleMoves() const {
+std::vector<std::string> King::possibleMoves(
+    std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
+    const {
   std::shared_ptr<Square> location = getLocation();
   std::vector<std::string> possibleMoves;
 
@@ -24,12 +24,12 @@ std::vector<std::string> King::possibleMoves() const {
   std::string uci = location->getFile() + location->getRank();
 
   // castle
-  if(notMovedYet()){
-    uci[0]-=2;
+  if (notMovedYet()) {
+    uci[0] -= 2;
     possibleMoves.push_back(uci);
-    uci[0]+=4;
+    uci[0] += 4;
     possibleMoves.push_back(uci);
-    uci[0]-=2;
+    uci[0] -= 2;
   }
 
   // cima
@@ -56,22 +56,22 @@ std::vector<std::string> King::possibleMoves() const {
   uci[0]++;
   possibleMoves.push_back(uci);
 
-  //direita
+  // direita
   uci[1]++;
   possibleMoves.push_back(uci);
 
-  //direita/cima
+  // direita/cima
   uci[1]++;
   possibleMoves.push_back(uci);
 
-  //captura à esquerda
+  // captura à esquerda
   std::vector<std::string>::iterator movit{possibleMoves.begin()};
   for (; movit != possibleMoves.end();) {
     if (!validateUciLimits(*movit)) {
       movit = possibleMoves.erase(movit);
-      } else {
-        ++movit;
-      }
+    } else {
+      ++movit;
+    }
   }
 
   return possibleMoves;

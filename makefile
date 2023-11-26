@@ -1,4 +1,4 @@
-parametrosCompilacao=-Wall -std=c++20 -g
+parametrosCompilacao=-Wall -std=c++20
 parametrosBoost = -lboost_system -lboost_filesystem -lboost_thread -pthread
 gg=gg
 

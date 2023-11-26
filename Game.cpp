@@ -32,9 +32,17 @@ void Game::run() {
 
     bool playerTurn = this->turn == this->playerColor;
     if (playerTurn) {
-      // response = Interface::getUserCommand();
-      response = this->cpu->getMove(this->board->getFen());
-      this->board->cpuUpdate(response);
+      response = Interface::getUserCommand();
+
+      if (response == "quit") {
+        break;
+      }
+
+      bool validMove;
+      while (!(validMove = this->board->playerUpdate(response))) {
+        Interface::printError("Invalid move, try again");
+        response = Interface::getUserCommand();
+      }
 
     } else {
       std::string fen = this->board->getFen();

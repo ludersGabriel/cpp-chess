@@ -8,7 +8,9 @@ Queen::Queen(std::shared_ptr<Square> square,
 
 int Queen::getValue() const { return Queen::value; }
 
-std::vector<std::string> Queen::possibleMoves() const {
+std::vector<std::string> Queen::possibleMoves(
+    std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
+    const {
   std::shared_ptr<Square> location = getLocation();
   std::vector<std::string> possibleMoves;
 
@@ -24,13 +26,13 @@ std::vector<std::string> Queen::possibleMoves() const {
   char i, j;
 
   // direita
-  for(i = initialFile+1; i < 'i';++i){
+  for (i = initialFile + 1; i < 'i'; ++i) {
     uci[0] = i;
     possibleMoves.push_back(uci);
   }
 
   // esquerda
-  for(i = initialFile-1; i >= 'a';--i){
+  for (i = initialFile - 1; i >= 'a'; --i) {
     uci[0] = i;
     possibleMoves.push_back(uci);
   }
@@ -38,26 +40,26 @@ std::vector<std::string> Queen::possibleMoves() const {
   uci[0] = initialFile;
 
   // cima
-  for(i = initialRank+1; i < '9';++i){
+  for (i = initialRank + 1; i < '9'; ++i) {
     uci[1] = i;
     possibleMoves.push_back(uci);
   }
 
   // cima
-  for(i = initialRank-1; i > '0';--i){
+  for (i = initialRank - 1; i > '0'; --i) {
     uci[1] = i;
     possibleMoves.push_back(uci);
   }
 
   // direita cima
-  for(i = initialFile+1, j = initialRank +1; i < 'i';++i, ++j){
+  for (i = initialFile + 1, j = initialRank + 1; i < 'i'; ++i, ++j) {
     uci[0] = i;
     uci[1] = j;
     possibleMoves.push_back(uci);
   }
 
   // direita baixo
-  for(i = initialFile+1, j = initialRank -1; i < 'i';++i, --j){
+  for (i = initialFile + 1, j = initialRank - 1; i < 'i'; ++i, --j) {
     uci[0] = i;
     uci[1] = j;
     possibleMoves.push_back(uci);
@@ -67,14 +69,14 @@ std::vector<std::string> Queen::possibleMoves() const {
   uci[1] = initialRank;
 
   // direita cima
-  for(i = initialFile-1, j = initialRank +1; i >= 'a';--i, ++j){
+  for (i = initialFile - 1, j = initialRank + 1; i >= 'a'; --i, ++j) {
     uci[0] = i;
     uci[1] = j;
     possibleMoves.push_back(uci);
   }
 
   // direita baixo
-  for(i = initialFile-1, j = initialRank -1; i >= 'a';--i, --j){
+  for (i = initialFile - 1, j = initialRank - 1; i >= 'a'; --i, --j) {
     uci[0] = i;
     uci[1] = j;
     possibleMoves.push_back(uci);
@@ -85,9 +87,9 @@ std::vector<std::string> Queen::possibleMoves() const {
   for (; movit != possibleMoves.end();) {
     if (!validateUciLimits(*movit)) {
       movit = possibleMoves.erase(movit);
-      } else {
-        ++movit;
-      }
+    } else {
+      ++movit;
+    }
   }
 
   return possibleMoves;

@@ -8,11 +8,11 @@ Pawn::Pawn(std::shared_ptr<Square> square,
 
 int Pawn::getValue() const { return Pawn::value; }
 
-bool Pawn::notMovedYet() const{
-  return isFirstMove;
-}
+bool Pawn::notMovedYet() const { return isFirstMove; }
 
-std::vector<std::string> Pawn::possibleMoves() const {
+std::vector<std::string> Pawn::possibleMoves(
+    std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
+    const {
   std::shared_ptr<Square> location = getLocation();
   std::vector<std::string> possibleMoves;
 
@@ -25,40 +25,39 @@ std::vector<std::string> Pawn::possibleMoves() const {
 
   // checa orientação baseado na cor da peça
   int mod;
-  if(this->getColor() == EnumPiecesColors::WHITE){
+  if (this->getColor() == EnumPiecesColors::WHITE) {
     mod = 1;
-  }
-  else{
+  } else {
     mod = -1;
   }
 
   // peão move uma vez para frente
-  uci[1]+=mod;
+  uci[1] += mod;
   possibleMoves.push_back(uci);
 
   // se é o primeiro movimento, pode se mover duas vezes
-  if(notMovedYet()){
-    uci[1]+=mod;
+  if (notMovedYet()) {
+    uci[1] += mod;
     possibleMoves.push_back(uci);
-    uci[1]-=mod;
+    uci[1] -= mod;
   }
 
-  //captura à esquerda
+  // captura à esquerda
   uci[0]--;
   possibleMoves.push_back(uci);
 
-  //captura à esquerda
-  uci[0]+=2;
+  // captura à esquerda
+  uci[0] += 2;
   possibleMoves.push_back(uci);
 
-  //captura à esquerda
+  // captura à esquerda
   std::vector<std::string>::iterator movit{possibleMoves.begin()};
   for (; movit != possibleMoves.end();) {
     if (!validateUciLimits(*movit)) {
       movit = possibleMoves.erase(movit);
-      } else {
-        ++movit;
-      }
+    } else {
+      ++movit;
+    }
   }
 
   return possibleMoves;

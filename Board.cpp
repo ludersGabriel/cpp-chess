@@ -1,6 +1,8 @@
 #include "Board.hpp"
 
-#include "Piece.hpp"
+#include <vector>
+#include <algorithm>
+#include <iostream>
 
 namespace chess {
 
@@ -40,26 +42,6 @@ const std::array<std::array<EnumFenRepresentation, 8>, 8> Board::initialBoard =
         EnumFenRepresentation::WHITE_KNIGHT,
         EnumFenRepresentation::WHITE_ROOK}}}};
 
-const std::unordered_map<std::string, int> Board::fileToIndex = {
-    {"a", 0}, {"b", 1}, {"c", 2}, {"d", 3},
-    {"e", 4}, {"f", 5}, {"g", 6}, {"h", 7}};
-
-const std::unordered_map<std::string, int> Board::rankToIndex = {
-    {"1", 7}, {"2", 6}, {"3", 5}, {"4", 4},
-    {"5", 3}, {"6", 2}, {"7", 1}, {"8", 0}};
-
-const std::unordered_map<int, std::string> Board::indexToFile = {
-    {0, "a"}, {1, "b"}, {2, "c"}, {3, "d"},
-    {4, "e"}, {5, "f"}, {6, "g"}, {7, "h"}};
-
-const std::unordered_map<int, std::string> Board::indexToRank = {
-    {7, "1"}, {6, "2"}, {5, "3"}, {4, "4"},
-    {3, "5"}, {2, "6"}, {1, "7"}, {0, "8"}};
-
-const std::string Board::bgLight = "\033[101m";
-const std::string Board::bgDark = "\033[103m";
-const std::string Board::bgReset = "\033[0m";
-
 Board::Board(const EnumPiecesColors& turn) : turn{turn} {
   for (int i = 0; i < 8; ++i) {
     for (int j = 0; j < 8; ++j) {
@@ -68,11 +50,11 @@ Board::Board(const EnumPiecesColors& turn) : turn{turn} {
         color = EnumSquareColors::DARK;
       }
 
-      std::string file = Board::indexToFile.at(j);
-      std::string rank = Board::indexToRank.at(i);
+      std::string file = Square::indexToFile.at(j);
+      std::string rank = Square::indexToRank.at(i);
 
-      int rankIndex = Board::rankToIndex.at(rank);
-      int fileIndex = Board::fileToIndex.at(file);
+      int rankIndex = Square::rankToIndex.at(rank);
+      int fileIndex = Square::fileToIndex.at(file);
 
       this->squares[rankIndex][fileIndex] =
           std::make_shared<Square>(file, rank, color);
@@ -82,11 +64,11 @@ Board::Board(const EnumPiecesColors& turn) : turn{turn} {
   }
 }
 
-std::array<std::array<std::string, 8>, 8> Board::getCharBoard() const {
-  std::array<std::array<std::string, 8>, 8> charBoard;
+std::array<std::array<EnumFenRepresentation, 8>, 8> Board::getFenBoard() const {
+  std::array<std::array<EnumFenRepresentation, 8>, 8> charBoard;
   for (int i = 0; i < 8; ++i) {
     for (int j = 0; j < 8; j++) {
-      charBoard[i][j] = static_cast<char>(this->squares[i][j]->getFen());
+      charBoard[i][j] = this->squares[i][j]->getFen();
     }
   }
   return charBoard;
@@ -132,8 +114,8 @@ std::string Board::getFen() const {
 }
 
 std::shared_ptr<Square>& Board::operator[](const std::string& uciPosition) {
-  int rank = Board::rankToIndex.at(uciPosition.substr(1, 1));
-  int file = Board::fileToIndex.at(uciPosition.substr(0, 1));
+  int rank = Square::rankToIndex.at(uciPosition.substr(1, 1));
+  int file = Square::fileToIndex.at(uciPosition.substr(0, 1));
 
   return this->squares[rank][file];
 }
@@ -149,24 +131,44 @@ void Board::cpuUpdate(const std::string& uciMove) {
   std::shared_ptr<Square> fromSquare = (*this)[from];
   std::shared_ptr<Square> toSquare = (*this)[to];
 
-  // ! Need to treat special move as well, like castles
+  fromSquare->movePieceTo(*toSquare);
+}
 
-  if (toSquare->getFen() != EnumFenRepresentation::EMPTY) {
-    toSquare->removePiece();
+bool Board::playerUpdate(const std::string& uciMove) {
+  if (uciMove.length() != 4) {
+    return false;
   }
 
-  fromSquare->changePieces(*toSquare);
-  toSquare->getPiece()->setLocation(toSquare);
+  std::string from = uciMove.substr(0, 2);
+  std::string to = uciMove.substr(2, 2);
+
+  std::shared_ptr<Square> fromSquare = (*this)[from];
+  std::shared_ptr<Square> toSquare = (*this)[to];
+
+  std::vector<std::string> possibleMoves =
+      fromSquare->possibleMoves(this->getSquares());
+
+  // for (auto& move : possibleMoves) std::cout << move << " ";
+  // std::cout << std::endl;
+  // std::cout << "to: " << to << std::endl;
+  // std::cout << "from: " << from << std::endl;
+
+  if (std::find(possibleMoves.begin(), possibleMoves.end(), to) ==
+      possibleMoves.end()) {
+    return false;
+  }
+
+  fromSquare->movePieceTo(*toSquare);
+  return true;
+}
+
+std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& Board::getSquares()
+    const {
+  return this->squares;
 }
 
 EnumPiecesColors Board::getTurn() const { return this->turn; }
 
 void Board::setTurn(const EnumPiecesColors& turn) { this->turn = turn; }
-
-std::string Board::getBgLight() const { return Board::bgLight; }
-
-std::string Board::getBgDark() const { return Board::bgDark; }
-
-std::string Board::getBgReset() const { return Board::bgReset; }
 
 }  // namespace chess

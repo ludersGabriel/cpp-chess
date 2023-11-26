@@ -28,8 +28,6 @@ Cpu::Cpu() {
   std::cout << "Received uciok, Stockfish is ready." << std::endl;
 }
 
-void Cpu::killStockfish() {}
-
 Cpu::~Cpu() {
   if (this->stockfish.running()) {
     std::cout << "Sending quit command to Stockfish..." << std::endl;
