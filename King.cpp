@@ -8,8 +8,6 @@ King::King(std::shared_ptr<Square> square,
 
 int King::getValue() const { return King::value; }
 
-bool King::notMovedYet() const { return isFirstMove; }
-
 std::vector<std::string> King::possibleMoves(
     std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
     const {

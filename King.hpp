@@ -24,7 +24,6 @@ class King : public Piece {
 
  private:
   constexpr static int value = 1000;
-  bool isFirstMove;
 };
 
 }  // namespace chess
