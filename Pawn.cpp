@@ -31,25 +31,41 @@ std::vector<std::string> Pawn::possibleMoves(
     mod = -1;
   }
 
+  std::shared_ptr<Square> square;
+  int i;
+  int j;
+
   // peão move uma vez para frente
   uci[1] += mod;
-  possibleMoves.push_back(uci);
+
+  i = Square::rankToIndex.at(uci.substr(1, 1));
+  j = Square::fileToIndex.at(uci.substr(0, 1));
+
+  if (boardState[i][j]->getPiece() == nullptr) {
+    possibleMoves.push_back(uci);
+  }
 
   // se é o primeiro movimento, pode se mover duas vezes
   if (notMovedYet()) {
     uci[1] += mod;
-    possibleMoves.push_back(uci);
+
+    i = Square::rankToIndex.at(uci.substr(1, 1));
+    j = Square::fileToIndex.at(uci.substr(0, 1));
+
+    if (boardState[i][j]->getPiece() == nullptr) {
+      possibleMoves.push_back(uci);
+    }
+
     uci[1] -= mod;
   }
 
   // captura à esquerda
   uci[0]--;
-  // e2
 
-  int i = Square::rankToIndex.at(uci.substr(1, 1));
-  int j = Square::fileToIndex.at(uci.substr(0, 1));
+  i = Square::rankToIndex.at(uci.substr(1, 1));
+  j = Square::fileToIndex.at(uci.substr(0, 1));
 
-  std::shared_ptr<Square> square = boardState[i][j];
+  square = boardState[i][j];
 
   if (square->getPiece() != nullptr) {
     if (square->getPiece()->getColor() != this->getColor()) {
@@ -64,15 +80,14 @@ std::vector<std::string> Pawn::possibleMoves(
 
   square = boardState[i][j];
 
-  if (square->getPiece() != nullptr) {
-    if (square->getPiece()->getColor() != this->getColor()) {
-      possibleMoves.push_back(uci);
-    }
+  if (square->getPiece() != nullptr &&
+      square->getPiece()->getColor() != this->getColor()) {
+    possibleMoves.push_back(uci);
   }
 
   std::vector<std::string>::iterator movit{possibleMoves.begin()};
   for (; movit != possibleMoves.end();) {
-    if (!validateUciLimits(*movit)) {
+    if (!validateUciLimits(*movit, boardState)) {
       movit = possibleMoves.erase(movit);
     } else {
       ++movit;

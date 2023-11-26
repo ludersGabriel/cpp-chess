@@ -2,7 +2,7 @@ parametrosCompilacao=-Wall -std=c++20
 parametrosBoost = -lboost_system -lboost_filesystem -lboost_thread -pthread
 gg=gg
 
-OBJ = main.o Bishop.o Board.o King.o Knight.o Pawn.o Piece.o Queen.o Rook.o Square.o Game.o Player.o Cpu.o Interface.o PieceFactory.o
+OBJ = main.o Bishop.o Board.o King.o Knight.o Pawn.o Piece.o Queen.o Rook.o Square.o Game.o Cpu.o Interface.o PieceFactory.o
 
 all: $(gg)
 
@@ -42,8 +42,6 @@ Square.o: Square.cpp Square.hpp
 Game.o: Game.cpp Game.hpp
 	g++ -c Game.cpp $(parametrosCompilacao)
 
-Player.o: Player.cpp Player.hpp
-	g++ -c Player.cpp $(parametrosCompilacao)
 
 Cpu.o: Cpu.cpp Cpu.hpp
 	g++ -c Cpu.cpp $(parametrosCompilacao) 

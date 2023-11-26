@@ -28,7 +28,9 @@ class Piece {
       std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
       const = 0;
 
-  bool validateUciLimits(std::string uci) const;
+  bool validateUciLimits(std::string uci,
+                         std::array<std::array<std::shared_ptr<Square>, 8>,
+                                    8> const& boardState) const;
 
  private:
   EnumPiecesColors pieceColor;

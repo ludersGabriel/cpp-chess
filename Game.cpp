@@ -42,6 +42,10 @@ void Game::run() {
       while (!(validMove = this->board->playerUpdate(response))) {
         Interface::printError("Invalid move, try again");
         response = Interface::getUserCommand();
+
+        if (response == "quit") {
+          break;
+        }
       }
 
     } else {

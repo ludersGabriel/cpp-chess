@@ -67,7 +67,7 @@ std::vector<std::string> King::possibleMoves(
   // captura à esquerda
   std::vector<std::string>::iterator movit{possibleMoves.begin()};
   for (; movit != possibleMoves.end();) {
-    if (!validateUciLimits(*movit)) {
+    if (!validateUciLimits(*movit, boardState)) {
       movit = possibleMoves.erase(movit);
     } else {
       ++movit;
