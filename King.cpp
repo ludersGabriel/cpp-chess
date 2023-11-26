@@ -1,5 +1,4 @@
 #include "King.hpp"
-#include <iostream>
 
 using namespace chess;
 
@@ -10,49 +9,6 @@ King::King(std::shared_ptr<Square> square,
 int King::getValue() const { return King::value; }
 
 bool King::notMovedYet() const { return isFirstMove; }
-
-bool King::isIncheck(std::string uci, std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState) const {
-
-  std::shared_ptr<Square> square;
-
-  int i, j;
-
-  for(i=0;i<8;++i){
-    for(j=0;j<8;++j){
-      // for each square of the board
-      square = boardState[i][j];
-      std::vector<std::string> possibleMoves;
-
-      // não chama para o Rei inimigo
-      char fenrepr = static_cast<char>(square->getFen());
-      if(!(fenrepr != 'k' && fenrepr != 'K')){
-        continue;
-      }
-
-      possibleMoves = square->possibleMoves(boardState);
-
-      std::unique_ptr<Piece>const& piece = square->getPiece();
-      // if a piece of the opossite color exists
-      if( piece != nullptr && piece->getColor() != this->getColor()){
-
-        std::cout << "Piece: " << static_cast<char>(square->getFen()) << std::endl << "Movements: ";
-
-        // and there is a possible move equal to the move you want
-        for( auto mv : possibleMoves ){
-          std::cout << mv << " ";
-          if(uci == mv)
-            return true;
-        }
-
-        std::cout << "TERMINEI" << std::endl;
-
-      }
-    }
-  }
-
-  return false;
-}
-
 
 std::vector<std::string> King::possibleMoves(
     std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
@@ -68,13 +24,13 @@ std::vector<std::string> King::possibleMoves(
   std::string uci = location->getFile() + location->getRank();
 
   // castle
-  if (notMovedYet()) {
-    uci[0] -= 2;
-    possibleMoves.push_back(uci);
-    uci[0] += 4;
-    possibleMoves.push_back(uci);
-    uci[0] -= 2;
-  }
+  // if (notMovedYet()) {
+  //   uci[0] -= 2;
+  //   possibleMoves.push_back(uci);
+  //   uci[0] += 4;
+  //   possibleMoves.push_back(uci);
+  //   uci[0] -= 2;
+  // }
 
   // cima
   uci[1]++;
@@ -113,12 +69,7 @@ std::vector<std::string> King::possibleMoves(
   for (; movit != possibleMoves.end();) {
     if (!validateUciLimits(*movit, boardState)) {
       movit = possibleMoves.erase(movit);
-    }
-    else if(isIncheck(*movit, boardState)){
-
-      movit = possibleMoves.erase(movit);
-    }
-     else {
+    } else {
       ++movit;
     }
   }

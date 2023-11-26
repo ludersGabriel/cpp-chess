@@ -91,7 +91,8 @@ std::string Interface::getUserCommand() {
     } else if (command.size() == 4) {
       if (command[0] < 'a' || command[0] > 'h' || command[1] < '1' ||
           command[1] > '8' || command[2] < 'a' || command[2] > 'h' ||
-          command[3] < '1' || command[3] > '8' || (command[1] == command[3] && command[0] == command[2])) {
+          command[3] < '1' || command[3] > '8' ||
+          (command[1] == command[3] && command[0] == command[2])) {
         std::cout << "Invalid input, try again\n";
         continue;
       }
@@ -120,32 +121,27 @@ void Interface::printBoard(const Board& board, bool isUnicode) {
     return;
   }
 
-  // Print the column headers
   std::cout << "   a  b  c  d  e  f  g  h\n";
 
   std::array<std::array<EnumFenRepresentation, 8>, 8> charBoard =
       board.getFenBoard();
 
   for (int i = 0; i < 8; ++i) {
-    std::cout << 8 - i << " ";  // Print the row number
+    std::cout << 8 - i << " ";
     for (int j = 0; j < 8; ++j) {
-      // Apply background color based on square color
       std::string bgColor = ((i + j) % 2 != 0) ? bgLight : bgDark;
-      // Determine the color of the piece
       std::string pieceColor =
           (charBoard[i][j] < EnumFenRepresentation::BLACK_BISHOP) ? whiteColor
                                                                   : blackColor;
 
       std::string out = std::string(1, static_cast<char>(charBoard[i][j]));
 
-      // Print the square with background color and centered piece
       std::cout << bgColor << pieceColor << " " << std::setw(1) << out << " "
                 << bgReset;
     }
-    std::cout << " " << 8 - i << "\n";  // Print the row number again
+    std::cout << " " << 8 - i << "\n";
   }
 
-  // Print the column footers
   std::cout << "   a  b  c  d  e  f  g  h\n" << bgReset;
 }
 
@@ -154,22 +150,19 @@ void Interface::printUnicodeBoard(const Board& board) {
       board.getFenBoard();
 
   for (int i = 0; i < 8; ++i) {
-    std::cout << 8 - i << " ";  // Print the row number
+    std::cout << 8 - i << " ";
     for (int j = 0; j < 8; ++j) {
-      // Apply background color based on square color
       std::string bgColor = ((i + j) % 2 != 0) ? bgLight : bgDark;
-      // Determine the color of the piece
       std::string pieceColor =
           (charBoard[i][j] < EnumFenRepresentation::BLACK_BISHOP) ? whiteColor
                                                                   : blackColor;
 
       std::string out = fenToUnicode.at(charBoard[i][j]);
 
-      // Print the square with background color and centered piece
       std::cout << bgColor << pieceColor << " " << std::setw(1) << out << " "
                 << bgReset;
     }
-    std::cout << " " << 8 - i << "\n";  // Print the row number again
+    std::cout << " " << 8 - i << "\n";
   }
 }
 

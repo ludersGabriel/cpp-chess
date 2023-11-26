@@ -159,12 +159,38 @@ bool Board::playerUpdate(const std::string& uciMove) {
   }
 
   fromSquare->movePieceTo(*toSquare);
+
+  if (toSquare->validateIfMyKinCheck(to, this->getSquares())) {
+    fromSquare->undoMovePieceTo(*toSquare);
+    return false;
+  }
+
+  for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 8; j++) {
+      this->squares[i][j]->resetOldFen();
+    }
+  }
+
   return true;
 }
 
 std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& Board::getSquares()
     const {
   return this->squares;
+}
+
+void Board::undoMove(const std::string& uciMove) {
+  if (uciMove.length() != 4) {
+    return;
+  }
+
+  std::string from = uciMove.substr(0, 2);
+  std::string to = uciMove.substr(2, 2);
+
+  std::shared_ptr<Square> fromSquare = (*this)[from];
+  std::shared_ptr<Square> toSquare = (*this)[to];
+
+  toSquare->undoMovePieceTo(*fromSquare);
 }
 
 EnumPiecesColors Board::getTurn() const { return this->turn; }

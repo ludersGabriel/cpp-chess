@@ -22,9 +22,17 @@ const std::unordered_map<int, std::string> Square::indexToRank = {
 
 Square::Square(const std::string file, const std::string rank,
                EnumSquareColors color)
-    : file{file}, rank{rank}, squareColor{color} {}
+    : file{file},
+      rank{rank},
+      squareColor{color},
+      piece{nullptr},
+      oldFen{EnumFenRepresentation::EMPTY} {}
 
 void Square::initializePiece(const EnumFenRepresentation& fenRepresentation) {
+  if (this->piece != nullptr) {
+    this->piece->setLocation(nullptr);
+  }
+
   this->piece =
       PieceFactory::createPiece(shared_from_this(), fenRepresentation);
 }
@@ -56,14 +64,34 @@ const EnumFenRepresentation Square::getFen() const {
 void Square::movePieceTo(Square& destination) {
   if (this->piece) {
     if (destination.piece) {
+      destination.oldFen = destination.piece->getFen();
       destination.piece = nullptr;
     }
 
+    this->oldFen = this->piece->getFen();
     this->piece->setLocation(destination.shared_from_this());
     destination.piece = std::move(this->piece);
   }
 }
 
+void Square::undoMovePieceTo(Square& destination) {
+  destination.initializePiece(destination.oldFen);
+  this->initializePiece(this->oldFen);
+}
+
 void Square::removePiece() { this->piece = nullptr; }
+
+void Square::resetOldFen() { this->oldFen = this->getFen(); }
+
+bool Square::validateIfMyKinCheck(
+    std::string uci,
+    std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
+    const {
+  if (this->piece) {
+    return this->piece->validateIfMyKingIsInCheck(uci, boardState);
+  } else {
+    return false;
+  }
+}
 
 }  // namespace chess

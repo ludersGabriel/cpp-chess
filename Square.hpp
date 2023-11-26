@@ -27,13 +27,21 @@ class Square : public std::enable_shared_from_this<Square> {
   std::unique_ptr<Piece> const& getPiece() const;
 
   void movePieceTo(Square& destination);
+  void undoMovePieceTo(Square& destination);
+
   void initializePiece(const EnumFenRepresentation& fenRepresentation);
 
   std::vector<std::string> possibleMoves(
       std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
       const;
 
+  bool validateIfMyKinCheck(std::string uci,
+                            std::array<std::array<std::shared_ptr<Square>, 8>,
+                                       8> const& boardState) const;
+
   void removePiece();
+
+  void resetOldFen();
 
   static const std::unordered_map<std::string, int> fileToIndex;
   static const std::unordered_map<std::string, int> rankToIndex;
@@ -46,6 +54,7 @@ class Square : public std::enable_shared_from_this<Square> {
 
   EnumSquareColors squareColor;
   std::unique_ptr<Piece> piece;
+  EnumFenRepresentation oldFen;
 };
 
 }  // namespace chess

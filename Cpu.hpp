@@ -15,6 +15,7 @@ class Cpu {
   virtual ~Cpu();
 
   std::string getMove(std::string fen);
+  bool lookForCheckmate(std::string fen);
   void setColor(const EnumPiecesColors color);
 
  private:

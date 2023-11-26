@@ -32,11 +32,13 @@ class Board {
 
   bool playerUpdate(const std::string& uciMove);
 
- private:
+  private:
   EnumPiecesColors turn;
   std::array<std::array<std::shared_ptr<Square>, 8>, 8> squares;
 
   static const std::array<std::array<EnumFenRepresentation, 8>, 8> initialBoard;
+
+  void undoMove(const std::string& uciMove);
 };
 
 }  // namespace chess

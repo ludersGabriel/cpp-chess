@@ -72,6 +72,25 @@ void Game::run() {
                      : EnumPiecesColors::WHITE;
 
     this->board->setTurn(this->turn);
+
+    std::string checkFen = this->board->getFen();
+
+    bool mated = this->cpu->lookForCheckmate(checkFen);
+
+    if (mated) {
+      Interface::clearScreen();
+      Interface::printBoard(*this->board);
+
+      std::cout << "Checkmate!" << std::endl;
+
+      if (this->turn != this->playerColor) {
+        std::cout << "You won!" << std::endl;
+      } else {
+        std::cout << "You lost!" << std::endl;
+      }
+
+      break;
+    }
   }
 
   Interface::farewell();

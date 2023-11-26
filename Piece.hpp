@@ -32,6 +32,11 @@ class Piece {
                          std::array<std::array<std::shared_ptr<Square>, 8>,
                                     8> const& boardState) const;
 
+  bool validateIfMyKingIsInCheck(
+      std::string uci,
+      std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
+      const;
+
  private:
   EnumPiecesColors pieceColor;
   std::weak_ptr<Square> location;

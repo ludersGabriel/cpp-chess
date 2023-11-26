@@ -47,4 +47,49 @@ bool Piece::validateUciLimits(std::string uci,
   return true;
 }
 
+bool Piece::validateIfMyKingIsInCheck(
+    std::string uci,
+    std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
+    const {
+  EnumFenRepresentation kingRep = this->getColor() == EnumPiecesColors::WHITE
+                                      ? EnumFenRepresentation::WHITE_KING
+                                      : EnumFenRepresentation::BLACK_KING;
+  std::shared_ptr<Square> myKingLocation = nullptr;
+
+  for (int i = 0; i < 8; ++i) {
+    for (int j = 0; j < 8; ++j) {
+      if (boardState[i][j]->getPiece() != nullptr &&
+          boardState[i][j]->getPiece()->getFen() == kingRep) {
+        myKingLocation = boardState[i][j];
+        break;
+      }
+    }
+  }
+
+  for (int i = 0; i < 8; ++i) {
+    for (int j = 0; j < 8; ++j) {
+      std::shared_ptr<Square> square = boardState[i][j];
+      std::unique_ptr<Piece> const& piece = square->getPiece();
+
+      if (!piece) continue;
+
+      if (piece->getColor() == this->getColor()) continue;
+
+      if (piece->getFen() == EnumFenRepresentation::WHITE_KING ||
+          piece->getFen() == EnumFenRepresentation::BLACK_KING)
+        continue;
+
+      std::vector<std::string> possibleMoves = piece->possibleMoves(boardState);
+
+      for (auto mv : possibleMoves) {
+        if (mv == myKingLocation->getFile() + myKingLocation->getRank()) {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+}
+
 }  // namespace chess

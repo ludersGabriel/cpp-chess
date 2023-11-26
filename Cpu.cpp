@@ -25,7 +25,29 @@ Cpu::Cpu() {
   while (std::getline(this->fromStockfish, response) && response != "uciok")
     ;
 
-  std::cout << "Received uciok, Stockfish is ready." << std::endl;
+  std::cout << "Received uciok." << std::endl;
+
+  // Set the skill level to 20, which is the maximum level
+  command = "setoption name Skill Level value 20\n";
+  this->toStockfish << command;
+  this->toStockfish.flush();
+
+  // Optionally, you can also disable any learning mechanisms of Stockfish
+  // by setting the "UCI_LimitStrength" option to false
+  command = "setoption name UCI_LimitStrength value false\n";
+  this->toStockfish << command;
+  this->toStockfish.flush();
+
+  // Make sure the engine has processed the options
+  command = "isready\n";
+  this->toStockfish << command;
+  this->toStockfish.flush();
+
+  while (std::getline(this->fromStockfish, response) && response != "readyok")
+    ;
+
+  std::cout << "Stockfish difficulty set to max. Sotckfish is ready"
+            << std::endl;
 }
 
 Cpu::~Cpu() {
@@ -80,4 +102,47 @@ std::string Cpu::getMove(std::string fen) {
   }
 
   return response.substr(9, 4);
+}
+
+bool Cpu::lookForCheckmate(std::string fen) {
+  if (!this->stockfish.running()) {
+    std::cout << "Stockfish is not running, probably crashed" << std::endl;
+    std::cout << "Something terrible happened, forcing exit" << std::endl;
+    exit(1);
+  }
+
+  this->toStockfish << "position fen " + fen + "\n";
+  this->toStockfish << "d"
+                    << "\n";
+  this->toStockfish.flush();
+
+  std::string response;
+
+  while (std::getline(this->fromStockfish, response) &&
+         response.substr(0, 8) != "Checkers")
+    ;
+
+  // response = Checkers: f2
+  std::string checker = response.substr(10, response.length() - 10);
+
+  // std::cout << "Received checkers: " << checker << std::endl;
+
+  bool hasCheckers = checker.length() > 0;
+  this->toStockfish.flush();
+
+  this->toStockfish << "go perft 1\n";
+  this->toStockfish.flush();
+  // Nodes searched: 0
+
+  while (std::getline(this->fromStockfish, response) &&
+         response.substr(0, 14) != "Nodes searched")
+    ;
+
+  int nodesSearched = std::stoi(response.substr(15, response.length() - 15));
+
+  // std::cout << "Received nodes searched: " << nodesSearched << std::endl;
+
+  bool hasCheckmate = nodesSearched == 0 && hasCheckers;
+
+  return hasCheckmate;
 }
