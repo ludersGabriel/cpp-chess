@@ -5,11 +5,14 @@
 #include "Square.hpp"
 #include "Piece.hpp"
 
+#include <memory>
+
 namespace chess {
 
 class Pawn : public Piece {
  public:
-  Pawn(Square* square, const EnumFenRepresentation& fenRepresentation);
+  Pawn(std::shared_ptr<Square> square,
+       const EnumFenRepresentation& fenRepresentation);
   virtual ~Pawn() = default;
 
   int getValue() const override;

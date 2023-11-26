@@ -2,11 +2,12 @@
 #include "Interface.hpp"
 
 #include <string>
+#include <iostream>
 
 using namespace chess;
 
 Game::Game()
-    : board{std::make_unique<Board>()},
+    : board{std::make_unique<Board>(EnumPiecesColors::WHITE)},
       cpu{std::make_unique<Cpu>()},
       turn{EnumPiecesColors::WHITE} {}
 
@@ -25,14 +26,39 @@ void Game::run() {
 
   this->cpu->setColor(this->playerColor);
 
-  // while (response != "quit") {
-  //   Interface::clearScreen();
-  //   if (this->turn == this->playerColor) {
-  //     response = Interface::getUserCommand();
-  //   } else {
-  //     // response = this->cpu->getMove();
-  //   }
-  // }
+  while (response != "quit") {
+    Interface::clearScreen();
+    Interface::printBoard(*this->board);
+
+    bool playerTurn = this->turn == this->playerColor;
+    if (playerTurn) {
+      // response = Interface::getUserCommand();
+      response = this->cpu->getMove(this->board->getFen());
+      this->board->cpuUpdate(response);
+
+    } else {
+      std::string fen = this->board->getFen();
+      // std::cout << "FEN: " << fen << std::endl;
+
+      response = this->cpu->getMove(fen);
+      // std::cout << "CPU move: " << response << std::endl;
+
+      if (response == "none") {
+        std::cout
+            << "CPU has no moves, something bad happenned. Ending the game!"
+            << std::endl;
+        break;
+      }
+
+      this->board->cpuUpdate(response);
+    }
+
+    this->turn = this->turn == EnumPiecesColors::WHITE
+                     ? EnumPiecesColors::BLACK
+                     : EnumPiecesColors::WHITE;
+
+    this->board->setTurn(this->turn);
+  }
 
   Interface::farewell();
 }

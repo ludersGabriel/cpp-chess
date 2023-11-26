@@ -2,33 +2,39 @@
 #define SQUARE_HPP
 
 #include "EnumSquareColors.hpp"
-class Piece;  // Forward Declaration
 
 #include <string>
+#include <memory>
+#include "EnumFenRepresentation.hpp"
 
 namespace chess {
 
-class Square {
+class Piece;  // Forward Declaration
+
+class Square : public std::enable_shared_from_this<Square> {
  public:
   Square() = default;
-  Square(const std::string file, const std::string rank, EnumSquareColors color);
+  Square(const std::string file, const std::string rank,
+         EnumSquareColors color);
   virtual ~Square() = default;
 
   std::string getFile() const;
   std::string getRank() const;
+  const EnumFenRepresentation getFen() const;
 
-  bool isOccupied() const;
-  void setOccupant(Piece *p);
-  Piece *getOccupant();
+  std::unique_ptr<Piece> const& getPiece() const;
 
-  const std::string getFen() const;
+  void changePieces(Square& other);
+  void initializePiece(const EnumFenRepresentation& fenRepresentation);
+
+  void removePiece();
 
  private:
-  std::string file;  // vertical line of chess
+  std::string file;  // vertical line of chess (column)
   std::string rank;  // horizontal line of chess
 
   EnumSquareColors squareColor;
-  Piece *piece;
+  std::unique_ptr<Piece> piece;
 };
 
 }  // namespace chess

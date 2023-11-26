@@ -1,6 +1,10 @@
 #include "Interface.hpp"
 
+#include "Piece.hpp"
+
 #include <iostream>
+#include <iomanip>
+#include <cctype>
 
 using namespace chess;
 
@@ -34,7 +38,7 @@ void Interface::help() {
   std::cout << "\tAsk for moves: e2\n";
   std::cout << "\tMake a move: e2e4\n";
   std::cout << "\tAsk for help: help\n";
-  std::cout << "Quit: quit\n\n";
+  std::cout << "\tQuit: quit\n\n";
 }
 
 std::string Interface::getUserCommand() {
@@ -85,4 +89,41 @@ void Interface::farewell() { std::cout << "Thanks for playing!\n"; }
 void Interface::clearScreen() {
   std::cout << "\033[2J\033[1;1H";
   std::cout.flush();
+}
+
+void Interface::printBoard(const Board& board) {
+  std::string bgLight =
+      board.getBgLight();  // ANSI background color for light squares
+  std::string bgDark =
+      board.getBgDark();  // ANSI background color for dark squares
+  std::string bgReset = board.getBgReset();  // ANSI reset formatting
+
+  std::string whiteColor =
+      Piece::getWhiteColor();  // ANSI color for white pieces
+  std::string blackColor =
+      Piece::getBlackColor();  // ANSI color for black pieces
+
+  // Print the column headers
+  std::cout << "   a  b  c  d  e  f  g  h\n";
+
+  auto charBoard = board.getCharBoard();
+
+  for (int i = 0; i < 8; ++i) {
+    std::cout << 8 - i << " ";  // Print the row number
+    for (int j = 0; j < 8; ++j) {
+      // Apply background color based on square color
+      std::string bgColor = ((i + j) % 2 != 0) ? bgLight : bgDark;
+      // Determine the color of the piece
+      std::string pieceColor =
+          (std::isupper(charBoard[i][j][0])) ? whiteColor : blackColor;
+
+      // Print the square with background color and centered piece
+      std::cout << bgColor << pieceColor << " " << std::setw(1)
+                << charBoard[i][j] << " " << bgReset;
+    }
+    std::cout << " " << 8 - i << "\n";  // Print the row number again
+  }
+
+  // Print the column footers
+  std::cout << "   a  b  c  d  e  f  g  h\n" << bgReset;
 }

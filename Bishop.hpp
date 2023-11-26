@@ -5,14 +5,18 @@
 #include "Square.hpp"
 #include "Piece.hpp"
 
-namespace chess {
+#include <memory>
 
+namespace chess {
 class Bishop : public Piece {
  public:
-  Bishop(Square* square, const EnumFenRepresentation& fenRepresentation);
+  Bishop(std::shared_ptr<Square> square,
+         const EnumFenRepresentation& fenRepresentation);
   virtual ~Bishop() = default;
 
   int getValue() const override;
+
+  std::vector<std::string> possibleMoves() const override;
 
  private:
   constexpr static int value = 3;

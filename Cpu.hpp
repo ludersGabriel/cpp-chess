@@ -24,6 +24,8 @@ class Cpu {
   constexpr static const char* stockfishPath =
       "stockfish/stockfish-ubuntu-x86-64-avx2";
   EnumPiecesColors color;
+
+  void killStockfish();
 };
 
 }  // namespace chess

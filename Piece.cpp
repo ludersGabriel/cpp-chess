@@ -2,7 +2,12 @@
 
 namespace chess {
 
-Piece::Piece(Square *square, const EnumFenRepresentation &rep)
+// grey for white
+// black for black
+const std::string Piece::whiteColor = "\033[1;37m";
+const std::string Piece::blackColor = "\033[1;30m";
+
+Piece::Piece(std::shared_ptr<Square> square, const EnumFenRepresentation &rep)
     : location{square} {
   this->pieceColor = rep >= EnumFenRepresentation::WHITE_BISHOP
                          ? EnumPiecesColors::WHITE
@@ -10,12 +15,21 @@ Piece::Piece(Square *square, const EnumFenRepresentation &rep)
   fenRep = rep;
 }
 
+std::shared_ptr<Square> Piece::getLocation() const {
+  // retruns null if the location doesnt hold a square anymore
+  return this->location.lock();
+}
+
+void Piece::setLocation(std::shared_ptr<Square> square) {
+  this->location = square;
+}
+
 EnumPiecesColors Piece::getColor() const { return this->pieceColor; }
 
-Square *Piece::getLocation() const { return this->location; }
-
-void Piece::setLocation(Square *square) { this->location = square; }
-
 EnumFenRepresentation Piece::getFen() const { return this->fenRep; }
+
+std::string Piece::getWhiteColor() { return whiteColor; }
+
+std::string Piece::getBlackColor() { return blackColor; }
 
 }  // namespace chess

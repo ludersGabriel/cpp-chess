@@ -6,6 +6,7 @@
 #include "EnumPiecesColors.hpp"
 #include "EnumFenRepresentation.hpp"
 
+#include "Piece.hpp"
 #include "Bishop.hpp"
 #include "King.hpp"
 #include "Knight.hpp"
@@ -17,10 +18,12 @@ namespace chess {
 
 class PieceFactory {
  public:
-  PieceFactory() = delete;
-
   static std::unique_ptr<Piece> createPiece(
-      Square* square, const EnumFenRepresentation& fenRepresentation);
+      std::shared_ptr<Square> square,
+      const EnumFenRepresentation& fenRepresentation);
+
+ private:
+  PieceFactory() = delete;
 };
 
 }  // namespace chess

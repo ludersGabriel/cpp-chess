@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "Square.hpp"
 #include "EnumPiecesColors.hpp"
@@ -13,24 +14,29 @@ namespace chess {
 class Piece {
  public:
   Piece() = default;
-  Piece(Square *square, const EnumFenRepresentation &rep);
+  Piece(std::shared_ptr<Square> square, const EnumFenRepresentation &rep);
   virtual ~Piece() = default;
 
   EnumPiecesColors getColor() const;
-
-  Square *getLocation() const;
-  void setLocation(Square *square);
-
+  std::shared_ptr<Square> getLocation() const;
   EnumFenRepresentation getFen() const;
+
+  void setLocation(std::shared_ptr<Square> square);
 
   virtual int getValue() const = 0;
   virtual std::vector<std::string> possibleMoves() const = 0;
 
+  static std::string getWhiteColor();
+  static std::string getBlackColor();
+
  private:
   EnumPiecesColors pieceColor;
-  Square *location;
+  std::weak_ptr<Square> location;
 
   EnumFenRepresentation fenRep;
+
+  static const std::string whiteColor;
+  static const std::string blackColor;
 };
 
 }  // namespace chess

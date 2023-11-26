@@ -17,7 +17,7 @@ class Interface {
   static std::string greetings();
   static std::string getUserCommand();
 
-  // static void printBoard(const Board& board);
+  static void printBoard(const Board& board);
 
   static void help();
   static void farewell();

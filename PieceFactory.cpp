@@ -4,7 +4,8 @@
 namespace chess {
 
 std::unique_ptr<Piece> PieceFactory::createPiece(
-    Square* square, const EnumFenRepresentation& fenRepresentation) {
+    std::shared_ptr<Square> square,
+    const EnumFenRepresentation& fenRepresentation) {
   switch (fenRepresentation) {
     case EnumFenRepresentation::WHITE_BISHOP:
     case EnumFenRepresentation::BLACK_BISHOP:
