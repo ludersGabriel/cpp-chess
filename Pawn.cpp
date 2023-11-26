@@ -4,11 +4,9 @@ using namespace chess;
 
 Pawn::Pawn(std::shared_ptr<Square> square,
            const EnumFenRepresentation& fenRepresentation)
-    : Piece(square, fenRepresentation), isFirstMove{true} {}
+    : Piece(square, fenRepresentation) {}
 
 int Pawn::getValue() const { return Pawn::value; }
-
-bool Pawn::notMovedYet() const { return isFirstMove; }
 
 std::vector<std::string> Pawn::possibleMoves(
     std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState)
@@ -25,64 +23,90 @@ std::vector<std::string> Pawn::possibleMoves(
 
   // checa orientação baseado na cor da peça
   int mod;
+  std::string firstRank;
   if (this->getColor() == EnumPiecesColors::WHITE) {
     mod = 1;
+    firstRank = "2";
   } else {
     mod = -1;
+    firstRank = "7";
   }
 
   std::shared_ptr<Square> square;
   int i;
   int j;
 
+  std::string rank;
+  std::string file;
+
+  // se é o primeiro movimento, pode se mover duas vezes
+  if (uci[1] == firstRank[0]) {
+    uci[1] += mod*2;
+
+    rank = uci.substr(1, 1);
+    file = uci.substr(0, 1);
+
+    if(rank >= "1" && rank <= "8" && file >= "a" && file <= "h"){
+      i = Square::rankToIndex.at(rank);
+      j = Square::fileToIndex.at(file);
+
+      if (boardState[i][j]->getPiece() == nullptr) {
+        possibleMoves.push_back(uci);
+      }
+    }
+    uci[1] -= mod*2;
+  }
+
   // peão move uma vez para frente
   uci[1] += mod;
 
-  i = Square::rankToIndex.at(uci.substr(1, 1));
-  j = Square::fileToIndex.at(uci.substr(0, 1));
+  rank = uci.substr(1, 1);
+  file = uci.substr(0, 1);
 
-  if (boardState[i][j]->getPiece() == nullptr) {
-    possibleMoves.push_back(uci);
-  }
-
-  // se é o primeiro movimento, pode se mover duas vezes
-  if (notMovedYet()) {
-    uci[1] += mod;
-
-    i = Square::rankToIndex.at(uci.substr(1, 1));
-    j = Square::fileToIndex.at(uci.substr(0, 1));
+  if(rank >= "1" && rank <= "8" && file >= "a" && file <= "h"){
+    i = Square::rankToIndex.at(rank);
+    j = Square::fileToIndex.at(file);
 
     if (boardState[i][j]->getPiece() == nullptr) {
       possibleMoves.push_back(uci);
     }
-
-    uci[1] -= mod;
   }
 
   // captura à esquerda
   uci[0]--;
 
-  i = Square::rankToIndex.at(uci.substr(1, 1));
-  j = Square::fileToIndex.at(uci.substr(0, 1));
+  rank = uci.substr(1, 1);
+  file = uci.substr(0, 1);
 
-  square = boardState[i][j];
+  if(rank >= "1" && rank <= "8" && file >= "a" && file <= "h"){
+    i = Square::rankToIndex.at(rank);
+    j = Square::fileToIndex.at(file);
 
-  if (square->getPiece() != nullptr) {
-    if (square->getPiece()->getColor() != this->getColor()) {
-      possibleMoves.push_back(uci);
+    square = boardState[i][j];
+
+    if (square->getPiece() != nullptr) {
+      if (square->getPiece()->getColor() != this->getColor()) {
+        possibleMoves.push_back(uci);
+      }
     }
   }
 
   // captura à direita
   uci[0] += 2;
-  i = Square::rankToIndex.at(uci.substr(1, 1));
-  j = Square::fileToIndex.at(uci.substr(0, 1));
 
-  square = boardState[i][j];
+  rank = uci.substr(1, 1);
+  file = uci.substr(0, 1);
 
-  if (square->getPiece() != nullptr &&
-      square->getPiece()->getColor() != this->getColor()) {
-    possibleMoves.push_back(uci);
+  if(rank >= "1" && rank <= "8" && file >= "a" && file <= "h"){
+    i = Square::rankToIndex.at(rank);
+    j = Square::fileToIndex.at(file);
+
+    square = boardState[i][j];
+
+    if (square->getPiece() != nullptr &&
+        square->getPiece()->getColor() != this->getColor()) {
+      possibleMoves.push_back(uci);
+    }
   }
 
   std::vector<std::string>::iterator movit{possibleMoves.begin()};

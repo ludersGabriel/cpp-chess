@@ -23,6 +23,7 @@ class King : public Piece {
   bool notMovedYet() const;
 
  private:
+  bool isIncheck(std::string uci, std::array<std::array<std::shared_ptr<Square>, 8>, 8> const& boardState) const;
   constexpr static int value = 1000;
   bool isFirstMove;
 };

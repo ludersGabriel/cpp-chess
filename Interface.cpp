@@ -91,7 +91,7 @@ std::string Interface::getUserCommand() {
     } else if (command.size() == 4) {
       if (command[0] < 'a' || command[0] > 'h' || command[1] < '1' ||
           command[1] > '8' || command[2] < 'a' || command[2] > 'h' ||
-          command[3] < '1' || command[3] > '8' || command[1] == command[3]) {
+          command[3] < '1' || command[3] > '8' || (command[1] == command[3] && command[0] == command[2])) {
         std::cout << "Invalid input, try again\n";
         continue;
       }
