@@ -9,14 +9,22 @@ Pawn::Pawn(std::shared_ptr<Square> square,
 
 int Pawn::getValue() const { return Pawn::value; }
 
+int Pawn::getValue() const { return Pawn::value; }
+
 bool Pawn::alreadyMove() const{
   return isFirstMove;
 }
 
 std::vector<std::string> Pawn::possibleMoves() const {
-  // constroi uci
-  std::string uci = (getLocation())->getFile() + (getLocation())->getRank();
+  std::shared_ptr<Square> location = getLocation();
   std::vector<std::string> possibleMoves;
+
+  if (location == nullptr) {
+    return possibleMoves;
+  }
+
+  // constroi uci
+  std::string uci = location->getFile() + location->getRank();
 
   // checa orientação baseado na cor da peça
   int mod;
