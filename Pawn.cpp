@@ -20,7 +20,7 @@ std::vector<std::string> Pawn::possibleMoves(
     return possibleMoves;
   }
 
-  // constroi uci
+  // constroi uci -> posicao atual
   std::string uci = location->getFile() + location->getRank();
 
   // checa orientação baseado na cor da peça
@@ -44,13 +44,32 @@ std::vector<std::string> Pawn::possibleMoves(
 
   // captura à esquerda
   uci[0]--;
-  possibleMoves.push_back(uci);
+  // e2
 
-  // captura à esquerda
+  int i = Square::rankToIndex.at(uci.substr(1, 1));
+  int j = Square::fileToIndex.at(uci.substr(0, 1));
+
+  std::shared_ptr<Square> square = boardState[i][j];
+
+  if (square->getPiece() != nullptr) {
+    if (square->getPiece()->getColor() != this->getColor()) {
+      possibleMoves.push_back(uci);
+    }
+  }
+
+  // captura à direita
   uci[0] += 2;
-  possibleMoves.push_back(uci);
+  i = Square::rankToIndex.at(uci.substr(1, 1));
+  j = Square::fileToIndex.at(uci.substr(0, 1));
 
-  // captura à esquerda
+  square = boardState[i][j];
+
+  if (square->getPiece() != nullptr) {
+    if (square->getPiece()->getColor() != this->getColor()) {
+      possibleMoves.push_back(uci);
+    }
+  }
+
   std::vector<std::string>::iterator movit{possibleMoves.begin()};
   for (; movit != possibleMoves.end();) {
     if (!validateUciLimits(*movit)) {
