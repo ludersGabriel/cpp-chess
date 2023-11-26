@@ -18,6 +18,7 @@ class King : public Piece {
   int getValue() const override;
 
   std::vector<std::string> possibleMoves() const override;
+  bool alreadyMove() const;
 
  private:
   constexpr static int value = 1000;

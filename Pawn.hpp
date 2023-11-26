@@ -17,10 +17,13 @@ class Pawn : public Piece {
 
   int getValue() const override;
 
+  bool alreadyMove() const;
+
   std::vector<std::string> possibleMoves() const override;
 
  private:
   constexpr static int value = 1;
+  bool isFirstMove;
 };
 
 }  // namespace chess

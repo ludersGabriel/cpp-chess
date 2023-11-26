@@ -30,8 +30,8 @@ class Square : public std::enable_shared_from_this<Square> {
   void removePiece();
 
  private:
-  std::string file;  // vertical line of chess (column)
-  std::string rank;  // horizontal line of chess
+  std::string file;  // vertical line of chess   | column
+  std::string rank;  // horizontal line of chess | line
 
   EnumSquareColors squareColor;
   std::unique_ptr<Piece> piece;

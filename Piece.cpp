@@ -1,5 +1,5 @@
 #include "Piece.hpp"
-
+#include <iostream>
 namespace chess {
 
 // grey for white
@@ -31,5 +31,16 @@ EnumFenRepresentation Piece::getFen() const { return this->fenRep; }
 std::string Piece::getWhiteColor() { return whiteColor; }
 
 std::string Piece::getBlackColor() { return blackColor; }
+bool Piece::validateUciLimits(std::string uci) const{
+  if(uci[0] < 'a' || uci[0] > 'h'){
+    return false;
+  }
+
+  if(uci[1] < '1' || uci[1] > '8'){
+    return false;
+  }
+
+  return true;
+}
 
 }  // namespace chess
