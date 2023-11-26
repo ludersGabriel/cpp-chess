@@ -9,6 +9,8 @@ using namespace chess;
 Game::Game()
     : board{std::make_unique<Board>(EnumPiecesColors::WHITE)},
       cpu{std::make_unique<Cpu>()},
+      playerColor{EnumPiecesColors::WHITE},
+      cpuColor{EnumPiecesColors::BLACK},
       turn{EnumPiecesColors::WHITE} {}
 
 void Game::run() {

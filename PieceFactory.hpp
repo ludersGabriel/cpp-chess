@@ -18,12 +18,11 @@ namespace chess {
 
 class PieceFactory {
  public:
+  PieceFactory() = delete;
+
   static std::unique_ptr<Piece> createPiece(
       std::shared_ptr<Square> square,
       const EnumFenRepresentation& fenRepresentation);
-
- private:
-  PieceFactory() = delete;
 };
 
 }  // namespace chess

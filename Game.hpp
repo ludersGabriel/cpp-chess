@@ -20,7 +20,7 @@ class Game {
   std::unique_ptr<Board> board;
   std::unique_ptr<Cpu> cpu;
   EnumPiecesColors playerColor;
-  EnumPiecesColors cpuColor = EnumPiecesColors::BLACK;
+  EnumPiecesColors cpuColor;
   EnumPiecesColors turn;
 };
 
