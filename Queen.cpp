@@ -8,7 +8,7 @@ Queen::Queen(std::shared_ptr<Square> square,
 
 int Queen::getValue() const { return Queen::value; }
 
-bool Queen::checkMove(int file, int rank, std::string uci,
+bool Queen::checkMove(std::string uci,
                       std::array<std::array<std::shared_ptr<Square>, 8>,
                                  8> const& boardState) const {
   int i = Square::rankToIndex.at(uci.substr(1, 1));
@@ -43,7 +43,7 @@ std::vector<std::string> Queen::possibleMoves(
     uci[0] = i;
     possibleMoves.push_back(uci);
 
-    if (this->checkMove(i, initialRank, uci, boardState)) {
+    if (this->checkMove(uci, boardState)) {
       break;
     }
   }
@@ -53,7 +53,7 @@ std::vector<std::string> Queen::possibleMoves(
     uci[0] = i;
     possibleMoves.push_back(uci);
 
-    if (this->checkMove(i, initialRank, uci, boardState)) {
+    if (this->checkMove(uci, boardState)) {
       break;
     }
   }
@@ -65,7 +65,7 @@ std::vector<std::string> Queen::possibleMoves(
     uci[1] = i;
     possibleMoves.push_back(uci);
 
-    if (this->checkMove(initialFile, i, uci, boardState)) {
+    if (this->checkMove(uci, boardState)) {
       break;
     }
   }
@@ -75,7 +75,7 @@ std::vector<std::string> Queen::possibleMoves(
     uci[1] = i;
     possibleMoves.push_back(uci);
 
-    if (this->checkMove(initialFile, i, uci, boardState)) {
+    if (this->checkMove(uci, boardState)) {
       break;
     }
   }
@@ -86,7 +86,7 @@ std::vector<std::string> Queen::possibleMoves(
     uci[1] = j;
     possibleMoves.push_back(uci);
 
-    if (this->checkMove(i, j, uci, boardState)) {
+    if (this->checkMove(uci, boardState)) {
       break;
     }
   }
@@ -97,7 +97,7 @@ std::vector<std::string> Queen::possibleMoves(
     uci[1] = j;
     possibleMoves.push_back(uci);
 
-    if (this->checkMove(i, j, uci, boardState)) {
+    if (this->checkMove(uci, boardState)) {
       break;
     }
   }
@@ -112,7 +112,7 @@ std::vector<std::string> Queen::possibleMoves(
     uci[1] = j;
     possibleMoves.push_back(uci);
 
-    if (this->checkMove(i, j, uci, boardState)) {
+    if (this->checkMove(uci, boardState)) {
       break;
     }
   }
@@ -124,7 +124,7 @@ std::vector<std::string> Queen::possibleMoves(
     uci[1] = j;
     possibleMoves.push_back(uci);
 
-    if (this->checkMove(i, j, uci, boardState)) {
+    if (this->checkMove(uci, boardState)) {
       break;
     }
   }

@@ -23,7 +23,7 @@ class Queen : public Piece {
 
  private:
   constexpr static int value = 9;
-  bool checkMove(int file, int rank, std::string uci,
+  bool checkMove(std::string uci,
                  std::array<std::array<std::shared_ptr<Square>, 8>, 8> const&
                      boardState) const;
 };
