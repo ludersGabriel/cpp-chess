@@ -148,10 +148,10 @@ bool Board::playerUpdate(const std::string& uciMove) {
   std::vector<std::string> possibleMoves =
       fromSquare->possibleMoves(this->getSquares());
 
-  for (auto& move : possibleMoves) std::cout << move << " ";
-  std::cout << std::endl;
-  std::cout << "to: " << to << std::endl;
-  std::cout << "from: " << from << std::endl;
+  // for (auto& move : possibleMoves) std::cout << move << " ";
+  // std::cout << std::endl;
+  // std::cout << "to: " << to << std::endl;
+  // std::cout << "from: " << from << std::endl;
 
   if (std::find(possibleMoves.begin(), possibleMoves.end(), to) ==
       possibleMoves.end()) {

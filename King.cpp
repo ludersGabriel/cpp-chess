@@ -4,7 +4,7 @@ using namespace chess;
 
 King::King(std::shared_ptr<Square> square,
            const EnumFenRepresentation& fenRepresentation)
-    : Piece(square, fenRepresentation), isFirstMove{true} {}
+    : Piece(square, fenRepresentation) {}
 
 int King::getValue() const { return King::value; }
 
